@@ -5,10 +5,11 @@ import java.time.LocalDateTime
 
 
 data class Budget(
+    var name: String,
     var limit: Double, // limit set
-    val totalSpent: Double, // spent
+    var totalSpent: Double, // spent
     val startDate: LocalDate, // start day for the budget
-    val endDate: LocalDate, // number of days budget is set for
+    var endDate: LocalDate, // number of days budget is set for
 ) {
 
     val expired: Boolean = false // stores flag for if budget has expired (ended)
@@ -39,6 +40,13 @@ data class Budget(
     fun updateLimit(newLimit: Double) {
         limitHistory.add(limit)
         this.limit = newLimit
+    }
+
+    // renames the budget
+    fun renameBudget(newName: String) {
+        // todo
+        // check if budget name has already been used
+        this.name = newName;
     }
 
 }
