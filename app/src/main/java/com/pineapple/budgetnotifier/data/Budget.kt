@@ -1,11 +1,11 @@
 package com.pineapple.budgetnotifier.data
 
 import java.time.LocalDate
-import java.time.LocalDateTime
 
 
 data class Budget(
-    var name: String,
+    var name: String, // name for budget
+    var desc: String, // description for budget
     var limit: Double, // limit set
     var totalSpent: Double, // spent
     val startDate: LocalDate, // start day for the budget
@@ -49,4 +49,8 @@ data class Budget(
         this.name = newName;
     }
 
+    // adds a new expense to the budget
+    fun addExpense(expense: Expense) {
+        this.expenses.add(expense)
+    }
 }
