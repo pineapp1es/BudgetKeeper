@@ -4,12 +4,13 @@ import java.time.LocalDate
 
 
 data class Budget(
+    var id: String, // unique identifier for budget
     var name: String, // name for budget
     var desc: String, // description for budget
     var limit: Double, // limit set
     var totalSpent: Double, // spent
-    val startDate: LocalDate, // start day for the budget
-    var endDate: LocalDate, // number of days budget is set for
+    val startDate: LocalDate?, // start day for the budget
+    var endDate: LocalDate?, // number of days budget is set for
 ) {
 
     val expired: Boolean = false // stores flag for if budget has expired (ended)
