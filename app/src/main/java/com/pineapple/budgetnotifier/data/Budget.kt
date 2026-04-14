@@ -3,22 +3,28 @@ package com.pineapple.budgetnotifier.data
 import java.time.LocalDate
 
 
+val allBudgets: MutableList<Budget> = mutableListOf()
+
 data class Budget(
     var id: String, // unique identifier for budget
     var name: String, // name for budget
     var desc: String, // description for budget
+    var totalSpent: Double,
     var limit: Double, // limit set
     val startDate: LocalDate?, // start day for the budget
     var endDate: LocalDate?, // number of days budget is set for
+    val expenses: MutableList<Expense>,
+    val limitHistory: MutableList<Double>,
+    var expired: Boolean,
 ) {
 
-    constructor(budget: Budget) : this(budget.id, budget.name, budget.desc, budget.limit, budget.startDate, budget.endDate)
+    constructor(budget: Budget) : this(
+        budget.id, budget.name, budget.desc,
+        budget.totalSpent, budget.limit, budget.startDate,
+        budget.endDate, budget.expenses, budget.limitHistory,
+        budget.expired,
+    )
 
-
-    var expired: Boolean = false // stores flag for if budget has expired (ended)
-    val expenses: MutableList<Expense> = mutableListOf() // list of expenses
-    val limitHistory: MutableList<Double> = mutableListOf() // history of limits set for this budget
-    var totalSpent: Double = 0.0
 
     // Checks if total money spent has reached or exceeded budget
     fun hasReachedLimit(): Boolean {
@@ -55,7 +61,18 @@ data class Budget(
 
     // adds a new expense to the budget
     fun addExpense(expense: Expense) {
+        expense.budgetIds.add(this.id)
         this.expenses.add(expense)
         this.totalSpent += expense.spentAmount
+    }
+
+    // removes expense from budget
+    fun removeExpense(expense: Expense) {
+        this.expenses.remove(expense)
+        expense.budgetIds.remove(this.id)
+        this.totalSpent -= expense.spentAmount
+        allBudgets.forEach { budget ->
+            if (budget.id in expense.budgetIds) budget.removeExpense(expense);
+        }
     }
 }

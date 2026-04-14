@@ -5,7 +5,7 @@ import java.time.LocalTime
 
 
 data class Expense(
-    val budgetId: String,
+    val budgetIds: MutableList<String>,
     val itemName: String,
     val spentAmount: Double,
     val time: LocalTime,
