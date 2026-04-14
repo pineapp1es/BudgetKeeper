@@ -13,6 +13,9 @@ data class Budget(
     var endDate: LocalDate?, // number of days budget is set for
 ) {
 
+    constructor(budget: Budget) : this(budget.id, budget.name, budget.desc, budget.limit, budget.totalSpent, budget.startDate, budget.endDate)
+
+
     val expired: Boolean = false // stores flag for if budget has expired (ended)
     val expenses: MutableList<Expense> = mutableListOf() // list of expenses
     val limitHistory: MutableList<Double> = mutableListOf() // history of limits set for this budget
@@ -53,5 +56,6 @@ data class Budget(
     // adds a new expense to the budget
     fun addExpense(expense: Expense) {
         this.expenses.add(expense)
+        this.totalSpent += expense.spentAmount
     }
 }

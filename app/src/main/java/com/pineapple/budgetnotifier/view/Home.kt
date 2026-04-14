@@ -7,8 +7,14 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.Card
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
@@ -16,7 +22,9 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -30,25 +38,31 @@ import com.pineapple.budgetnotifier.data.loadData
 
 
 
-var selectedBudget: Budget? = collectiveBudget
+
 // todo
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun Home() {
-    Column {
-        BudgetSection()
+    var view by remember { mutableStateOf("Home") }
+    val selectedBudget = remember { mutableStateOf(collectiveBudget) }
+    loadData()
+    Column (
+        modifier = Modifier
+            .padding(20.dp)
+    ) {
+        BudgetSection(selectedBudget)
         ExpensesSection(selectedBudget)
-        BottomBar("Home")
+        BottomBar(view)
     }
 }
 
 // todo
 @Composable
-fun BudgetSection() {
+fun BudgetSection(budget: MutableState<Budget>) {
     Column {
         Row(modifier = Modifier.padding(10.dp)) {
-            BudgetSelectionMenu()
-            DailyBudgetToggle()
+            BudgetSelectionMenu(budget)
+            DailyBudgetToggle(budget)
         }
     }
 }
@@ -56,13 +70,13 @@ fun BudgetSection() {
 // todo
 // toggles between daily budget (if available) and total budget
 @Composable
-fun DailyBudgetToggle() {
+fun DailyBudgetToggle(budget: MutableState<Budget>) {
     Text(modifier = Modifier.clickable(onClick = {}), text = "D")
 }
 
 // todo
 @Composable
-fun BudgetSelectionMenu() {
+fun BudgetSelectionMenu(budget: MutableState<Budget>) {
     var expanded by remember { mutableStateOf(false) }
     Box(
         modifier = Modifier
@@ -70,18 +84,18 @@ fun BudgetSelectionMenu() {
     ) {
         Row {
             IconButton(onClick = { expanded = !expanded }) {
-                Icon(Icons.Default.ArrowDropDown, contentDescription = "More options")
+                Icon(Icons.Default.ArrowDropDown, contentDescription = "Select Budget")
             }
-            Text(selectedBudget?.name ?: "test")
+            Text(budget.value.name)
         }
         DropdownMenu(
             expanded = expanded,
             onDismissRequest = { expanded = false }
         ) {
-            activeBudgets.forEach { budget ->
+            activeBudgets.forEach { _budget ->
                 DropdownMenuItem(
-                    text = { Text(budget.name) },
-                    onClick = { selectedBudget = budget }
+                    text = { Text(_budget.name) },
+                    onClick = { budget.value = _budget; expanded = !expanded; }
                 )
             }
         }
@@ -91,17 +105,26 @@ fun BudgetSelectionMenu() {
 
 // todo
 @Composable
-fun ExpensesSection(budget: Budget?) {
+fun ExpensesSection(selected: MutableState<Budget>) {
     Column {
         Text("Search")
-        Card {
-            Text("Expense#1")
-        }
-        Card {
-            Text("Expense#2")
-        }
-        Card {
-            Text("Expense#3")
+        LazyColumn {
+            items(selected.value.expenses) { expense ->
+                Card {
+                    Row {
+                        Column() {
+                            Text(expense.itemName)
+                            Text(expense.spentAmount.toString())
+                        }
+                        IconButton(onClick = {}) {
+                            Icon(Icons.Default.Delete, contentDescription = "Delete Expense")
+                        }
+                        IconButton(onClick = {}) {
+                            Icon(Icons.Default.MoreVert, contentDescription = "About Expense")
+                        }
+                    }
+                }
+            }
         }
     }
 }
