@@ -11,7 +11,7 @@ val activeBudgets: MutableList<Budget> = mutableListOf()
 val expiredBudgets: MutableList<Budget> = mutableListOf()
 // store info for all active budgets somehow todo
 var collectiveBudget: Budget = Budget(
-        "collective", "All Budgets", "All budgets in one", 0.0, 0.0, null, null
+        "collective", "All Budgets", "All budgets in one", 0.0, null, null
     )
 
 // default budget where all expenses are put by default
@@ -47,16 +47,16 @@ fun loadData() {
 fun placeholderBudgets(): MutableList<Budget> {
     val placeholders: MutableList<Budget> = mutableListOf()
     val budget1: Budget = Budget(
-            "1", "BudgetOne", "BudgetOne Description", 1000.0, 500.0, LocalDate.now(), LocalDate.now()
+            "1", "BudgetOne", "BudgetOne Description", 1000.0, LocalDate.now(), LocalDate.now()
         )
     val budget2: Budget = Budget(
-            "2", "BudgetTwo", "BudgetTwo Description", 2000.0, 1000.0, LocalDate.now(), LocalDate.now()
+            "2", "BudgetTwo", "BudgetTwo Description", 2000.0, LocalDate.now(), LocalDate.now()
         )
     val budget3: Budget = Budget(
-            "3", "BudgetThree", "BudgetThree Description", 4000.0, 2000.0, LocalDate.now(), LocalDate.now()
+            "3", "BudgetThree", "BudgetThree Description", 4000.0, LocalDate.now(), LocalDate.now()
         )
     val budget4: Budget = Budget(
-            "4", "BudgetFour", "BudgetFour Description", 8000.0, 4000.0, LocalDate.now(), LocalDate.now()
+            "4", "BudgetFour", "BudgetFour Description", 8000.0, LocalDate.now(), LocalDate.now()
         )
 
     budget1.addExpense(Expense("1", "OneOne", 300.0, LocalTime.now(), LocalDate.now(), "Expense one in budget one"))

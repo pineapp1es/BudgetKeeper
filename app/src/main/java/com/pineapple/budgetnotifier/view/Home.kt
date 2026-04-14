@@ -6,6 +6,8 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -64,8 +66,29 @@ fun BudgetSection(budget: MutableState<Budget>) {
             BudgetSelectionMenu(budget)
             DailyBudgetToggle(budget)
         }
+        BudgetInfo(budget)
     }
 }
+
+
+// todo
+// shows brief details about current selected budget
+@Composable
+fun BudgetInfo(budget: MutableState<Budget>) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(20.dp)
+    ) {
+        Text("+", modifier = Modifier.padding(20.dp))
+        Text((budget.value.limit - budget.value.totalSpent).toString(), modifier = Modifier.padding(20.dp))
+        Column() {
+            Text(budget.value.limit.toString())
+            Text("-" + budget.value.totalSpent.toString())
+        }
+    }
+}
+
 
 // todo
 // toggles between daily budget (if available) and total budget
@@ -112,7 +135,7 @@ fun ExpensesSection(selected: MutableState<Budget>) {
             items(selected.value.expenses) { expense ->
                 Card {
                     Row {
-                        Column() {
+                        Column {
                             Text(expense.itemName)
                             Text(expense.spentAmount.toString())
                         }

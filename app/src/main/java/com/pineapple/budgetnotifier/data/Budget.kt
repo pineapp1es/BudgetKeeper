@@ -8,17 +8,17 @@ data class Budget(
     var name: String, // name for budget
     var desc: String, // description for budget
     var limit: Double, // limit set
-    var totalSpent: Double, // spent
     val startDate: LocalDate?, // start day for the budget
     var endDate: LocalDate?, // number of days budget is set for
 ) {
 
-    constructor(budget: Budget) : this(budget.id, budget.name, budget.desc, budget.limit, budget.totalSpent, budget.startDate, budget.endDate)
+    constructor(budget: Budget) : this(budget.id, budget.name, budget.desc, budget.limit, budget.startDate, budget.endDate)
 
 
-    val expired: Boolean = false // stores flag for if budget has expired (ended)
+    var expired: Boolean = false // stores flag for if budget has expired (ended)
     val expenses: MutableList<Expense> = mutableListOf() // list of expenses
     val limitHistory: MutableList<Double> = mutableListOf() // history of limits set for this budget
+    var totalSpent: Double = 0.0
 
     // Checks if total money spent has reached or exceeded budget
     fun hasReachedLimit(): Boolean {
