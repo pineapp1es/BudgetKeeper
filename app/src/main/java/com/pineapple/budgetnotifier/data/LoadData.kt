@@ -17,8 +17,9 @@ var collectiveBudget: Budget = Budget(
     0.0, 0.0,
     null, null,
     mutableListOf(), mutableListOf(),
-    false
 )
+
+val selected: SelectionData = SelectionData(collectiveBudget, null)
 
 // default budget where all expenses are put by default
 //lateinit var defaultBudget: Budget
@@ -47,7 +48,9 @@ fun loadData() {
         activeBudgets.add(collectiveBudget)
     }
 
-    allBudgets.addAll(activeBudgets);
+    allBudgets.addAll(activeBudgets)
+
+    selected.expense = allBudgets[2].expenses[0]
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -58,28 +61,30 @@ fun placeholderBudgets(): MutableList<Budget> {
         0.0, 1000.0,
         LocalDate.now(), LocalDate.now(),
         mutableListOf(), mutableListOf(),
-        false,
     )
     val budget2: Budget = Budget(
         "2", "BudgetTwo", "BudgetTwo Description",
         0.0, 2000.0,
         LocalDate.now(), LocalDate.now(),
         mutableListOf(), mutableListOf(),
-        false,
     )
     val budget3: Budget = Budget(
         "3", "BudgetThree", "BudgetThree Description",
         0.0, 4000.0,
         LocalDate.now(), LocalDate.now(),
         mutableListOf(), mutableListOf(),
-        false,
     )
     val budget4: Budget = Budget(
         "4", "BudgetFour", "BudgetFour Description",
         0.0, 8000.0,
         LocalDate.now(), LocalDate.now(),
         mutableListOf(), mutableListOf(),
-        false,
+    )
+    val budget5: Budget = Budget(
+        "5", "BudgetFive", "BudgetFive Description",
+        0.0, 16000.0,
+        LocalDate.now(), LocalDate.now(),
+        mutableListOf(), mutableListOf(),
     )
 
     budget1.addExpense(
@@ -186,12 +191,66 @@ fun placeholderBudgets(): MutableList<Budget> {
         )
     )
 
+
+    budget5.addExpense(
+        Expense(
+            mutableListOf(),
+            "FiveOne",
+            100.0,
+            LocalTime.now(),
+            LocalDate.now(),
+            "Expense one in budget five"
+        )
+    )
+    budget5.addExpense(
+        Expense(
+            mutableListOf(),
+            "FiveTwo",
+            200.0,
+            LocalTime.now(),
+            LocalDate.now(),
+            "Expense two in budget five"
+        )
+    )
+    budget5.addExpense(
+        Expense(
+            mutableListOf(),
+            "FiveThree",
+            400.0,
+            LocalTime.now(),
+            LocalDate.now(),
+            "Expense three in budget five"
+        )
+    )
+    budget5.addExpense(
+        Expense(
+            mutableListOf(),
+            "FiveFour",
+            800.0,
+            LocalTime.now(),
+            LocalDate.now(),
+            "Expense four in budget five"
+        )
+    )
+    budget5.addExpense(
+        Expense(
+            mutableListOf(),
+            "FiveFive",
+            1600.0,
+            LocalTime.now(),
+            LocalDate.now(),
+            "Expense five in budget five"
+        )
+    )
+
+
     placeholders.addAll(
         listOf(
             budget1,
             budget2,
             budget3,
             budget4,
+            budget5,
         )
     )
 

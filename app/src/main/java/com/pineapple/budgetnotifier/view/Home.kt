@@ -7,14 +7,12 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowDropDown
-import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Card
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
@@ -24,24 +22,24 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import com.pineapple.budgetnotifier.R
 import com.pineapple.budgetnotifier.data.Budget
 import com.pineapple.budgetnotifier.data.activeBudgets
 import com.pineapple.budgetnotifier.data.collectiveBudget
 import com.pineapple.budgetnotifier.data.loadData
+import com.pineapple.budgetnotifier.data.selected
 
 
 // todo
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun Home() {
-    var view by remember { mutableStateOf("Home") }
+fun Home(view: MutableState<String>) {
     val selectedBudget = remember { mutableStateOf(collectiveBudget) }
     loadData()
     Column(
@@ -49,7 +47,7 @@ fun Home() {
             .padding(20.dp)
     ) {
         BudgetSection(selectedBudget)
-        ExpensesSection(selectedBudget)
+        ExpensesSection(selectedBudget, view)
         BottomBar(view)
     }
 }
@@ -76,7 +74,9 @@ fun BudgetInfo(budget: MutableState<Budget>) {
             .fillMaxWidth()
             .padding(20.dp)
     ) {
-        Text("+", modifier = Modifier.padding(20.dp))
+        val budgetLeft = budget.value.limit - budget.value.totalSpent
+        if (budgetLeft > 0) Text("+", modifier = Modifier.padding(20.dp))
+        else Text("-", modifier = Modifier.padding(20.dp))
         Text(
             (budget.value.limit - budget.value.totalSpent).toString(),
             modifier = Modifier.padding(20.dp)
@@ -106,7 +106,8 @@ fun BudgetSelectionMenu(budget: MutableState<Budget>) {
     ) {
         Row {
             IconButton(onClick = { expanded = !expanded }) {
-                Icon(Icons.Default.ArrowDropDown, contentDescription = "Select Budget")
+//                Icon(Icons.Default.ArrowDropDown, contentDescription = "Select Budget")
+                Icon(painterResource(R.drawable.baseline_arrow_drop_down_24), "Select Budget")
             }
             Text(budget.value.name)
         }
@@ -127,51 +128,96 @@ fun BudgetSelectionMenu(budget: MutableState<Budget>) {
 
 // todo
 @Composable
-fun ExpensesSection(budget: MutableState<Budget>) {
+fun ExpensesSection(budget: MutableState<Budget>, view: MutableState<String>) {
     val _budget = Budget(budget.value)
     var update by remember { mutableStateOf(false) }
+    val listState = rememberLazyListState()
     Column(
         modifier = Modifier
             .padding(10.dp)
             .offset(x = 20.dp)
+            .height(500.dp)
     ) {
 //        TextField("Search")
-//        key(update) {
-            LazyColumn {
-                items(_budget.expenses) { expense ->
-//                _budget.expenses.forEach { expense ->
-                    Card {
-                        Row {
-                            Column {
-                                Text(expense.itemName)
-                                Text(expense.spentAmount.toString())
-                                Text(expense.time.toString() + " " + expense.date.toString())
-                            }
-                            IconButton(onClick = {
-                                _budget.removeExpense(expense); budget.value = _budget; update = !update;
-                            }) {
-                                Icon(Icons.Default.Delete, contentDescription = "Delete Expense")
-                            }
-                            IconButton(onClick = {}) {
-                                Icon(Icons.Default.MoreVert, contentDescription = "About Expense")
-                            }
+        Row() {
+            IconButton(onClick = {
+                view.value = "expenseInfo"
+                selected.budget = budget.value
+            }) {
+//                Icon(Icons.Default.Add, contentDescription = "Add Expense")
+                Icon(painterResource(R.drawable.baseline_add_24), "Add Expense")
+            }
+            Text("Search")
+        }
+        LazyColumn(
+            modifier = Modifier,
+            state = listState,
+        ) {
+            items(_budget.expenses) { expense ->
+                Card {
+                    Row {
+                        Column {
+                            Text(expense.itemName)
+                            Text(expense.spentAmount.toString())
+                            Text(expense.time.toString() + " " + expense.date.toString())
+                        }
+                        IconButton(onClick = {
+                            _budget.removeExpense(expense); budget.value = _budget; update =
+                            !update;
+                        }) {
+//                            Icon(Icons.Default.Delete, contentDescription = "Delete Expense")
+                            Icon(painterResource(R.drawable.baseline_delete_24), "Delete Expense")
+                        }
+                        IconButton(onClick = {}) {
+//                            Icon(Icons.Default.MoreVert, contentDescription = "About Expense")
+                            Icon(painterResource(R.drawable.baseline_more_vert_24), "About Expense")
                         }
                     }
                 }
             }
-//        }
+        }
     }
 }
 
 @Composable
-fun BottomBar(currentView: String) {
+fun BottomBar(currentView: MutableState<String>) {
+    Row() {
+        IconButton(
+            modifier = Modifier
+                .padding(20.dp),
+            onClick = {
+//                currentView.value = "Home"
+            }) {
+//            Icon(Icons.Default.Home, contentDescription = "Home View")
+            Icon(painterResource(R.drawable.baseline_home_24), "Home View")
+        }
 
+        IconButton(
+            modifier = Modifier
+                .padding(20.dp),
+            onClick = {
+                currentView.value = "Budgets"
+            }) {
+//            Icon(Icons.Default.AccountCircle, contentDescription = "Budgets View")
+            Icon(painterResource(R.drawable.baseline_account_balance_wallet_24), "Budgets View")
+        }
+
+        IconButton(
+            modifier = Modifier
+                .padding(20.dp),
+            onClick = {
+                currentView.value = "Transactions"
+            }) {
+//            Icon(Icons.Default.ShoppingCart, contentDescription = "Transactions View")
+            Icon(painterResource(R.drawable.baseline_shopping_cart_24), "Transactions View")
+        }
+    }
 }
 
 
-@RequiresApi(Build.VERSION_CODES.O)
-@Preview
-@Composable
-fun HomePreview() {
-    Home()
-}
+//@RequiresApi(Build.VERSION_CODES.O)
+//@Preview
+//@Composable
+//fun HomePreview() {
+//    Home(mutableStateOf<String>('Home'))
+//}
