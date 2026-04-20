@@ -8,6 +8,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import com.pineapple.budgetnotifier.data.Views
 import com.pineapple.budgetnotifier.style.BudgetNotifierTheme
 import com.pineapple.budgetnotifier.view.ExpenseInfoView
 import com.pineapple.budgetnotifier.view.Home
@@ -19,12 +20,13 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
 
         setContent {
-            val view = remember { mutableStateOf("Home") }
+            val view = remember { mutableStateOf(Views.HOME) }
             BudgetNotifierTheme {
 
                 when(view.value) {
-                    "Home" -> Home(view)
-                    "expenseInfo" -> ExpenseInfoView(view)
+                    Views.HOME -> Home(view)
+                    Views.EXPENSEINFO -> ExpenseInfoView(view)
+                    else -> Home(view)
                 }
 
             }

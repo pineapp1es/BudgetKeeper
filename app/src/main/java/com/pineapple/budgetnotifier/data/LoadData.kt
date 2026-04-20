@@ -50,7 +50,7 @@ fun loadData() {
 
     allBudgets.addAll(activeBudgets)
 
-    selected.expense = allBudgets[2].expenses[0]
+//    selected.expense = allBudgets[2].expenses[0]
 }
 
 @RequiresApi(Build.VERSION_CODES.O)

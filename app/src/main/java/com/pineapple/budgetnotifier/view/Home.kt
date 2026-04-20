@@ -30,6 +30,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.pineapple.budgetnotifier.R
 import com.pineapple.budgetnotifier.data.Budget
+import com.pineapple.budgetnotifier.data.Views
 import com.pineapple.budgetnotifier.data.activeBudgets
 import com.pineapple.budgetnotifier.data.collectiveBudget
 import com.pineapple.budgetnotifier.data.loadData
@@ -39,7 +40,7 @@ import com.pineapple.budgetnotifier.data.selected
 // todo
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun Home(view: MutableState<String>) {
+fun Home(view: MutableState<Views>) {
     val selectedBudget = remember { mutableStateOf(collectiveBudget) }
     loadData()
     Column(
@@ -102,11 +103,9 @@ fun BudgetSelectionMenu(budget: MutableState<Budget>) {
     var expanded by remember { mutableStateOf(false) }
     Box(
         modifier = Modifier
-//            .padding(16.dp)
     ) {
         Row {
             IconButton(onClick = { expanded = !expanded }) {
-//                Icon(Icons.Default.ArrowDropDown, contentDescription = "Select Budget")
                 Icon(painterResource(R.drawable.baseline_arrow_drop_down_24), "Select Budget")
             }
             Text(budget.value.name)
@@ -128,7 +127,7 @@ fun BudgetSelectionMenu(budget: MutableState<Budget>) {
 
 // todo
 @Composable
-fun ExpensesSection(budget: MutableState<Budget>, view: MutableState<String>) {
+fun ExpensesSection(budget: MutableState<Budget>, view: MutableState<Views>) {
     val _budget = Budget(budget.value)
     var update by remember { mutableStateOf(false) }
     val listState = rememberLazyListState()
@@ -138,13 +137,11 @@ fun ExpensesSection(budget: MutableState<Budget>, view: MutableState<String>) {
             .offset(x = 20.dp)
             .height(500.dp)
     ) {
-//        TextField("Search")
         Row() {
             IconButton(onClick = {
-                view.value = "expenseInfo"
+                view.value = Views.EXPENSEINFO
                 selected.budget = budget.value
             }) {
-//                Icon(Icons.Default.Add, contentDescription = "Add Expense")
                 Icon(painterResource(R.drawable.baseline_add_24), "Add Expense")
             }
             Text("Search")
@@ -165,11 +162,9 @@ fun ExpensesSection(budget: MutableState<Budget>, view: MutableState<String>) {
                             _budget.removeExpense(expense); budget.value = _budget; update =
                             !update;
                         }) {
-//                            Icon(Icons.Default.Delete, contentDescription = "Delete Expense")
                             Icon(painterResource(R.drawable.baseline_delete_24), "Delete Expense")
                         }
                         IconButton(onClick = {}) {
-//                            Icon(Icons.Default.MoreVert, contentDescription = "About Expense")
                             Icon(painterResource(R.drawable.baseline_more_vert_24), "About Expense")
                         }
                     }
@@ -180,7 +175,7 @@ fun ExpensesSection(budget: MutableState<Budget>, view: MutableState<String>) {
 }
 
 @Composable
-fun BottomBar(currentView: MutableState<String>) {
+fun BottomBar(currentView: MutableState<Views>) {
     Row() {
         IconButton(
             modifier = Modifier
@@ -188,7 +183,6 @@ fun BottomBar(currentView: MutableState<String>) {
             onClick = {
 //                currentView.value = "Home"
             }) {
-//            Icon(Icons.Default.Home, contentDescription = "Home View")
             Icon(painterResource(R.drawable.baseline_home_24), "Home View")
         }
 
@@ -196,9 +190,8 @@ fun BottomBar(currentView: MutableState<String>) {
             modifier = Modifier
                 .padding(20.dp),
             onClick = {
-                currentView.value = "Budgets"
+                currentView.value = Views.BUDGETLIST
             }) {
-//            Icon(Icons.Default.AccountCircle, contentDescription = "Budgets View")
             Icon(painterResource(R.drawable.baseline_account_balance_wallet_24), "Budgets View")
         }
 
@@ -206,9 +199,8 @@ fun BottomBar(currentView: MutableState<String>) {
             modifier = Modifier
                 .padding(20.dp),
             onClick = {
-                currentView.value = "Transactions"
+                currentView.value = Views.EXPENSELIST
             }) {
-//            Icon(Icons.Default.ShoppingCart, contentDescription = "Transactions View")
             Icon(painterResource(R.drawable.baseline_shopping_cart_24), "Transactions View")
         }
     }
