@@ -18,6 +18,7 @@ import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
@@ -28,6 +29,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.pineapple.budgetnotifier.R
 import com.pineapple.budgetnotifier.data.Budget
 import com.pineapple.budgetnotifier.data.Views
@@ -40,16 +45,15 @@ import com.pineapple.budgetnotifier.data.selected
 // todo
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun Home(view: MutableState<Views>) {
+fun Home(
+    view: MutableState<Views>,
+) {
     val selectedBudget = remember { mutableStateOf(collectiveBudget) }
-    loadData()
     Column(
         modifier = Modifier
-            .padding(20.dp)
     ) {
         BudgetSection(selectedBudget)
         ExpensesSection(selectedBudget, view)
-        BottomBar(view)
     }
 }
 
@@ -129,7 +133,6 @@ fun BudgetSelectionMenu(budget: MutableState<Budget>) {
 @Composable
 fun ExpensesSection(budget: MutableState<Budget>, view: MutableState<Views>) {
     val _budget = Budget(budget.value)
-    var update by remember { mutableStateOf(false) }
     val listState = rememberLazyListState()
     Column(
         modifier = Modifier
@@ -159,8 +162,7 @@ fun ExpensesSection(budget: MutableState<Budget>, view: MutableState<Views>) {
                             Text(expense.time.toString() + " " + expense.date.toString())
                         }
                         IconButton(onClick = {
-                            _budget.removeExpense(expense); budget.value = _budget; update =
-                            !update;
+                            _budget.removeExpense(expense); budget.value = _budget;
                         }) {
                             Icon(painterResource(R.drawable.baseline_delete_24), "Delete Expense")
                         }
@@ -170,38 +172,6 @@ fun ExpensesSection(budget: MutableState<Budget>, view: MutableState<Views>) {
                     }
                 }
             }
-        }
-    }
-}
-
-@Composable
-fun BottomBar(currentView: MutableState<Views>) {
-    Row() {
-        IconButton(
-            modifier = Modifier
-                .padding(20.dp),
-            onClick = {
-//                currentView.value = "Home"
-            }) {
-            Icon(painterResource(R.drawable.baseline_home_24), "Home View")
-        }
-
-        IconButton(
-            modifier = Modifier
-                .padding(20.dp),
-            onClick = {
-                currentView.value = Views.BUDGETLIST
-            }) {
-            Icon(painterResource(R.drawable.baseline_account_balance_wallet_24), "Budgets View")
-        }
-
-        IconButton(
-            modifier = Modifier
-                .padding(20.dp),
-            onClick = {
-                currentView.value = Views.EXPENSELIST
-            }) {
-            Icon(painterResource(R.drawable.baseline_shopping_cart_24), "Transactions View")
         }
     }
 }

@@ -12,10 +12,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.res.painterResource
 import com.pineapple.budgetnotifier.R
+import com.pineapple.budgetnotifier.data.Views
 import com.pineapple.budgetnotifier.data.selected
 
 @Composable
-fun ExpenseInfoView(view: MutableState<String>) {
+fun ExpenseInfoView(view: MutableState<Views>) {
     val title = selected.expense?.itemName ?: "New Expense"
     Column() {
 

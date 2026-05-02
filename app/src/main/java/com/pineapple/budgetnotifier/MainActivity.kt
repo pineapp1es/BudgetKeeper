@@ -11,6 +11,7 @@ import androidx.compose.runtime.remember
 import com.pineapple.budgetnotifier.data.Views
 import com.pineapple.budgetnotifier.style.BudgetNotifierTheme
 import com.pineapple.budgetnotifier.view.ExpenseInfoView
+import com.pineapple.budgetnotifier.view.ExpensesView
 import com.pineapple.budgetnotifier.view.Home
 
 class MainActivity : ComponentActivity() {
@@ -22,13 +23,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             val view = remember { mutableStateOf(Views.HOME) }
             BudgetNotifierTheme {
-
-                when(view.value) {
-                    Views.HOME -> Home(view)
-                    Views.EXPENSEINFO -> ExpenseInfoView(view)
-                    else -> Home(view)
-                }
-
+                MainScreen(view)
             }
         }
     }

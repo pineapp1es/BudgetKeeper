@@ -6,4 +6,6 @@ enum class Views {
     EXPENSELIST,
     BUDGETINFO,
     BUDGETLIST,
+
+    SETTINGS,
 }
