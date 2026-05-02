@@ -29,6 +29,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -47,13 +48,14 @@ import com.pineapple.budgetnotifier.data.selected
 @Composable
 fun Home(
     view: MutableState<Views>,
+    navController: NavController,
 ) {
     val selectedBudget = remember { mutableStateOf(collectiveBudget) }
     Column(
         modifier = Modifier
     ) {
         BudgetSection(selectedBudget)
-        ExpensesSection(selectedBudget, view)
+        ExpensesSection(selectedBudget, view, navController)
     }
 }
 
@@ -131,7 +133,7 @@ fun BudgetSelectionMenu(budget: MutableState<Budget>) {
 
 // todo
 @Composable
-fun ExpensesSection(budget: MutableState<Budget>, view: MutableState<Views>) {
+fun ExpensesSection(budget: MutableState<Budget>, view: MutableState<Views>, navController: NavController) {
     val _budget = Budget(budget.value)
     val listState = rememberLazyListState()
     Column(
@@ -142,8 +144,9 @@ fun ExpensesSection(budget: MutableState<Budget>, view: MutableState<Views>) {
     ) {
         Row() {
             IconButton(onClick = {
-                view.value = Views.EXPENSEINFO
                 selected.budget = budget.value
+                view.value = Views.EXPENSEINFO
+                navController.navigate(Views.EXPENSEINFO.name)
             }) {
                 Icon(painterResource(R.drawable.baseline_add_24), "Add Expense")
             }

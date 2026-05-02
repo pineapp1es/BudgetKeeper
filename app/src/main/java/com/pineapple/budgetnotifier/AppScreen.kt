@@ -47,7 +47,7 @@ fun MainScreen(
             modifier = Modifier.padding(innerPadding),
         ) {
             composable(route = Views.HOME.name) {
-                Home(view)
+                Home(view, navController)
             }
 
             composable(route = Views.BUDGETLIST.name) {
