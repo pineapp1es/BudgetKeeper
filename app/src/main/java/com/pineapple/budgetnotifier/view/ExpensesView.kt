@@ -20,13 +20,15 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.pineapple.budgetnotifier.R
 import com.pineapple.budgetnotifier.data.Views
 import com.pineapple.budgetnotifier.data.activeBudgets
+import com.pineapple.budgetnotifier.data.selected
 
 
 @Composable
-fun ExpensesView(view: MutableState<Views>) {
+fun ExpensesView(view: MutableState<Views>, navController: NavController) {
     val update = remember { mutableStateOf(false) }
     Column() {
 
@@ -53,7 +55,12 @@ fun ExpensesView(view: MutableState<Views>) {
                                 }) {
                                     Icon(painterResource(R.drawable.baseline_delete_24), "Delete Expense")
                                 }
-                                IconButton(onClick = {}) {
+                                IconButton(onClick = {
+                                    selected.budget = budget
+                                    selected.expense = expense
+                                    view.value = Views.EXPENSEINFO
+                                    navController.navigate(Views.EXPENSEINFO.name)
+                                }) {
                                     Icon(painterResource(R.drawable.baseline_more_vert_24), "About Expense")
                                 }
                             }

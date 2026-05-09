@@ -145,6 +145,7 @@ fun ExpensesSection(budget: MutableState<Budget>, view: MutableState<Views>, nav
         Row() {
             IconButton(onClick = {
                 selected.budget = budget.value
+                selected.expense = null
                 view.value = Views.EXPENSEINFO
                 navController.navigate(Views.EXPENSEINFO.name)
             }) {
@@ -169,7 +170,12 @@ fun ExpensesSection(budget: MutableState<Budget>, view: MutableState<Views>, nav
                         }) {
                             Icon(painterResource(R.drawable.baseline_delete_24), "Delete Expense")
                         }
-                        IconButton(onClick = {}) {
+                        IconButton(onClick = {
+                            selected.budget = budget.value
+                            selected.expense = expense
+                            view.value = Views.EXPENSEINFO
+                            navController.navigate(Views.EXPENSEINFO.name)
+                        }) {
                             Icon(painterResource(R.drawable.baseline_more_vert_24), "About Expense")
                         }
                     }

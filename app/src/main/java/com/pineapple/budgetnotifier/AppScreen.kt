@@ -19,8 +19,10 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.pineapple.budgetnotifier.data.Expense
 import com.pineapple.budgetnotifier.data.Views
 import com.pineapple.budgetnotifier.data.loadData
+import com.pineapple.budgetnotifier.data.selected
 import com.pineapple.budgetnotifier.view.BudgetInfoView
 import com.pineapple.budgetnotifier.view.BudgetsView
 import com.pineapple.budgetnotifier.view.ExpenseInfoView
@@ -58,10 +60,11 @@ fun MainScreen(
             }
 
             composable(route = Views.EXPENSELIST.name) {
-                ExpensesView(view)
+                ExpensesView(view, navController)
             }
             composable(route = Views.EXPENSEINFO.name) {
-                ExpenseInfoView(view)
+                if (selected.expense == null) selected.expense = Expense.createNewEmpty()
+                ExpenseInfoView(view, selected.expense!!)
             }
 
             composable(route = Views.SETTINGS.name) {
