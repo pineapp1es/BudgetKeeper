@@ -1,5 +1,7 @@
 package com.pineapple.budgetnotifier.view
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.text.input.rememberTextFieldState
@@ -14,48 +16,70 @@ import com.pineapple.budgetnotifier.R
 import com.pineapple.budgetnotifier.data.Expense
 import com.pineapple.budgetnotifier.data.Views
 import com.pineapple.budgetnotifier.data.selected
+import java.time.LocalDate
+import java.time.LocalTime
+import kotlin.math.exp
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun ExpenseInfoView(view: MutableState<Views>, expense: Expense /* = Expense.createNewTemplate() */) {
 
     val name = selected.expense?.itemName ?: "New Expense"
+    val nameState = rememberTextFieldState(name)
+
     val budget = (selected.budget?.name ?: "")
+    val budgetState = rememberTextFieldState(budget)
+
     val time = (selected.expense?.time ?: "").toString()
+    val timeState = rememberTextFieldState(time)
+
     val date = (selected.expense?.date ?: "").toString()
+    val dateState = rememberTextFieldState(date)
+
     val desc = (selected.expense?.desc ?: "")
+    val descState = rememberTextFieldState(desc)
 
     Column() {
 
         Row() {
-            IconButton(onClick = {}) {
+            IconButton(onClick = {
+                expense = Expense(
+                    expense.budgetIds,
+                    nameState.toString(),
+                    expense.spentAmount,
+                    LocalTime(timeState.text.toString()),
+                    LocalDate(dateState.text.toString()),
+                    descState.text.toString()
+                )
+            }) {
                 Icon(painterResource(R.drawable.baseline_save_24), "Save Expense Data")
             }
         }
 
         OutlinedTextField(
-            state = rememberTextFieldState(name),
+            state = nameState,
             label = { Text("Expense Name") }
         )
 
         // TODO
         // make this a dropdown to choose which budget
         OutlinedTextField(
-            state = rememberTextFieldState(budget),
+            state = budgetState,
             label = { Text("Budget") }
         )
 
         OutlinedTextField(
-            state = rememberTextFieldState(desc),
+            state = descState,
             label = { Text("Description") }
         )
 
         OutlinedTextField(
-            state = rememberTextFieldState(time),
-            label = { Text("Time of transaction") }
+            state = timeState,
+            label = { Text("Time of transaction") },
         )
 
         OutlinedTextField(
-            state = rememberTextFieldState(date),
+            state = dateState,
             label = { Text("Date of transaction") }
         )
 
