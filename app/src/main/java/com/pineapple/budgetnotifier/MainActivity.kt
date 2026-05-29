@@ -9,6 +9,8 @@ import androidx.annotation.RequiresApi
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import com.pineapple.budgetnotifier.data.Views
+import com.pineapple.budgetnotifier.database.Connect
+import com.pineapple.budgetnotifier.database.DatabaseConnection
 import com.pineapple.budgetnotifier.style.BudgetNotifierTheme
 import com.pineapple.budgetnotifier.view.ExpenseInfoView
 import com.pineapple.budgetnotifier.view.ExpensesView
@@ -19,6 +21,8 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+
+        val dbConnection = DatabaseConnection(applicationContext)
 
         setContent {
             val view = remember { mutableStateOf(Views.HOME) }
