@@ -11,6 +11,7 @@ import androidx.compose.runtime.remember
 import com.pineapple.budgetnotifier.data.Views
 import com.pineapple.budgetnotifier.database.Connect
 import com.pineapple.budgetnotifier.database.DatabaseConnection
+import com.pineapple.budgetnotifier.database.BudgetNotifierDatabase
 import com.pineapple.budgetnotifier.style.BudgetNotifierTheme
 import com.pineapple.budgetnotifier.view.ExpenseInfoView
 import com.pineapple.budgetnotifier.view.ExpensesView
@@ -22,12 +23,10 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
-        val dbConnection = DatabaseConnection(applicationContext)
-
         setContent {
             val view = remember { mutableStateOf(Views.HOME) }
             BudgetNotifierTheme {
-                MainScreen(view)
+                MainScreen(view, applicationContext)
             }
         }
     }

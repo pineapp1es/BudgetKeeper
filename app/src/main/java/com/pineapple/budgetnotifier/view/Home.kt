@@ -41,6 +41,7 @@ import com.pineapple.budgetnotifier.data.activeBudgets
 import com.pineapple.budgetnotifier.data.collectiveBudget
 import com.pineapple.budgetnotifier.data.loadData
 import com.pineapple.budgetnotifier.data.selected
+import com.pineapple.budgetnotifier.database.BudgetNotifierDatabase
 
 
 // todo
@@ -49,6 +50,7 @@ import com.pineapple.budgetnotifier.data.selected
 fun Home(
     view: MutableState<Views>,
     navController: NavController,
+    db: BudgetNotifierDatabase,
 ) {
     val selectedBudget = remember { mutableStateOf(collectiveBudget) }
     Column(

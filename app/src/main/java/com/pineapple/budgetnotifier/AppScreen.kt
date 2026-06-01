@@ -29,6 +29,8 @@ import com.pineapple.budgetnotifier.view.ExpenseInfoView
 import com.pineapple.budgetnotifier.view.ExpensesView
 import com.pineapple.budgetnotifier.view.Home
 import com.pineapple.budgetnotifier.view.SettingsView
+import com.pineapple.budgetnotifier.database.BudgetNotifierDatabase
+import android.content.Context
 
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -36,10 +38,13 @@ import com.pineapple.budgetnotifier.view.SettingsView
 fun MainScreen(
     view: MutableState<Views>,
     navController: NavHostController = rememberNavController(),
+    context: Context,
 ) {
     // TEMPORARY #####
     loadData()
     // TEMPORARY #####
+
+    val db = BudgetNotifierDatabase.getDb(context)
     Scaffold(
         bottomBar = { BottomBar(view, navController) }
     ) { innerPadding ->
@@ -49,7 +54,7 @@ fun MainScreen(
             modifier = Modifier.padding(innerPadding),
         ) {
             composable(route = Views.HOME.name) {
-                Home(view, navController)
+                Home(view, navController, db)
             }
 
             composable(route = Views.BUDGETLIST.name) {
