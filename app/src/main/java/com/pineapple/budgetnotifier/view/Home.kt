@@ -42,6 +42,7 @@ import com.pineapple.budgetnotifier.data.collectiveBudget
 import com.pineapple.budgetnotifier.data.loadData
 import com.pineapple.budgetnotifier.data.selected
 import com.pineapple.budgetnotifier.database.BudgetNotifierDatabase
+import com.pineapple.budgetnotifier.database.allBudgetRecords
 
 
 // todo
@@ -56,6 +57,7 @@ fun Home(
     Column(
         modifier = Modifier
     ) {
+        CacheData.
         BudgetSection(selectedBudget)
         ExpensesSection(selectedBudget, view, navController)
     }
