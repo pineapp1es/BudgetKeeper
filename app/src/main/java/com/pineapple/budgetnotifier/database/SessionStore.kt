@@ -8,7 +8,8 @@ object {
     var budgetRecords: Array<Budget>? = null;
     var expenseRecords: Array<Expense>? = null;
 
-    fun loadAllBudgetRecords() {
-        this.budgetRecords = 
+    fun loadAllBudgetRecords(db: BudgetNotifierDatabase) {
+        
+        this.budgetRecords = db.
     }
 }
