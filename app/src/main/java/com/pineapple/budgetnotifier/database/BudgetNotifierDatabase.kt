@@ -6,10 +6,14 @@ import com.pineapple.budgetnotifier.database.access.BudgetDao
 import com.pineapple.budgetnotifier.database.access.ExpenseDao
 import com.pineapple.budgetnotifier.database.entities.Budget
 import com.pineapple.budgetnotifier.database.entities.Expense
+import com.pineapple.budgetnotifier.database.Converters
 import android.content.Context
+import androidx.room.Room
+import androidx.room.TypeConverters
 import kotlin.synchronized
 
 @Database(entities = [Budget::class, Expense::class], version = 1)
+@TypeConverters(Converters::class)
 abstract class BudgetNotifierDatabase(): RoomDatabase() {
     abstract fun budgetDao(): BudgetDao
     abstract fun expenseDao(): ExpenseDao
@@ -29,7 +33,7 @@ abstract class BudgetNotifierDatabase(): RoomDatabase() {
                 ).build()
                 db = newdb
 
-                db
+                newdb
             }
 
         }

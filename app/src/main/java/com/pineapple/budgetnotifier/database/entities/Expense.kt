@@ -3,8 +3,7 @@ package com.pineapple.budgetnotifier.database.entities
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
-import java.sql.Date
-import java.sql.Time
+import java.util.Date
 import kotlin.arrayOf
 
 @Entity(
@@ -24,5 +23,4 @@ data class Expense(
     val reason: String,
     val cost: String,
     val date: Date,
-    val time: Time,
 )
