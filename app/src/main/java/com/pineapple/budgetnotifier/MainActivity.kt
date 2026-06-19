@@ -8,7 +8,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import com.pineapple.budgetnotifier.data.Views
+import com.pineapple.budgetnotifier.Views
 import com.pineapple.budgetnotifier.database.Connect
 import com.pineapple.budgetnotifier.database.DatabaseConnection
 import com.pineapple.budgetnotifier.database.BudgetNotifierDatabase

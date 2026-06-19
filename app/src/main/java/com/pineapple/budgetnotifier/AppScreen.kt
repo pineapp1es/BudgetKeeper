@@ -19,10 +19,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.pineapple.budgetnotifier.data.Expense
-import com.pineapple.budgetnotifier.data.Views
-import com.pineapple.budgetnotifier.data.loadData
-import com.pineapple.budgetnotifier.data.selected
+import com.pineapple.budgetnotifier.Views
 import com.pineapple.budgetnotifier.view.BudgetInfoView
 import com.pineapple.budgetnotifier.view.BudgetsView
 import com.pineapple.budgetnotifier.view.ExpenseInfoView
@@ -32,6 +29,9 @@ import com.pineapple.budgetnotifier.view.SettingsView
 import com.pineapple.budgetnotifier.database.BudgetNotifierDatabase
 import android.content.Context
 
+import com.pineapple.budgetnotifier.database.Selected
+import com.pineapple.budgetnotifier.database.entities.Expense
+
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -40,9 +40,6 @@ fun MainScreen(
     navController: NavHostController = rememberNavController(),
     context: Context,
 ) {
-    // TEMPORARY #####
-    loadData()
-    // TEMPORARY #####
 
     val db = BudgetNotifierDatabase.getDb(context)
     Scaffold(
@@ -68,8 +65,10 @@ fun MainScreen(
                 ExpensesView(view, navController)
             }
             composable(route = Views.EXPENSEINFO.name) {
-                if (selected.expense == null) selected.expense = Expense.createNewEmpty()
-                ExpenseInfoView(view, selected.expense!!)
+                if (Selected.expense == null) Selected.expense =
+						  Expense.newExpense(Selected.budget?.id
+									 ?: "?budget?")
+                ExpenseInfoView(view, Selected.expense!!)
             }
 
             composable(route = Views.SETTINGS.name) {

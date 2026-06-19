@@ -35,6 +35,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.pineapple.budgetnotifier.R
+import com.pineapple.budgetnotifier.Views
 import com.pineapple.budgetnotifier.data.Budget
 import com.pineapple.budgetnotifier.data.Views
 import com.pineapple.budgetnotifier.data.activeBudgets
@@ -57,7 +58,6 @@ fun Home(
     Column(
         modifier = Modifier
     ) {
-        CacheData.
         BudgetSection(selectedBudget)
         ExpensesSection(selectedBudget, view, navController)
     }
@@ -178,7 +178,7 @@ fun ExpensesSection(budget: MutableState<Budget>, view: MutableState<Views>, nav
                             selected.budget = budget.value
                             selected.expense = expense
                             view.value = Views.EXPENSEINFO
-                            navController.navigate(Views.EXPENSEINFO.name)
+                            navController.navigate(Views.EXPENSEINFO.name, expense)
                         }) {
                             Icon(painterResource(R.drawable.baseline_more_vert_24), "About Expense")
                         }
