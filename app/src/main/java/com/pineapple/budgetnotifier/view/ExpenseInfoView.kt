@@ -13,30 +13,34 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.res.painterResource
 import com.pineapple.budgetnotifier.R
-import com.pineapple.budgetnotifier.data.Expense
-import com.pineapple.budgetnotifier.data.Views
-import com.pineapple.budgetnotifier.data.selected
+import com.pineapple.budgetnotifier.Views
+import com.pineapple.budgetnotifier.database.Selected
+import com.pineapple.budgetnotifier.database.entities.Expense
+import com.pineapple.budgetnotifier.utils.getRandomString
 import java.time.LocalDate
 import java.time.LocalTime
 import kotlin.math.exp
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun ExpenseInfoView(view: MutableState<Views>, expense: Expense /* = Expense.createNewTemplate() */) {
+fun ExpenseInfoView(view: MutableState<Views>, expense: Expense = Expense.newExpense(Selected.budget.id)) {
 
-    val name = selected.expense?.itemName ?: "New Expense"
+    val id = Selected.expense?.id ?: getRandomString(10)
+    val idState = rememberTextFieldState(id)
+
+    val budgetId = (Selected.budget?.budgetId ?: "")
+    val budgetState = rememberTextFieldState(budgetId)
+
+    val name = Selected.expense?.name ?: "New Expense"
     val nameState = rememberTextFieldState(name)
 
-    val budget = (selected.budget?.name ?: "")
-    val budgetState = rememberTextFieldState(budget)
-
-    val time = (selected.expense?.time ?: "").toString()
+    val time = (Selected.expense?.time ?: "").toString()
     val timeState = rememberTextFieldState(time)
 
-    val date = (selected.expense?.date ?: "").toString()
+    val date = (Selected.expense?.date ?: "").toString()
     val dateState = rememberTextFieldState(date)
 
-    val desc = (selected.expense?.desc ?: "")
+    val desc = (Selected.expense?.desc ?: "")
     val descState = rememberTextFieldState(desc)
 
     Column() {

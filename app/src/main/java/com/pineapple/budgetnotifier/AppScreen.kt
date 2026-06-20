@@ -37,8 +37,8 @@ import com.pineapple.budgetnotifier.database.entities.Expense
 @Composable
 fun MainScreen(
     view: MutableState<Views>,
-    navController: NavHostController = rememberNavController(),
     context: Context,
+    navController: NavHostController = rememberNavController(),
 ) {
 
     val db = BudgetNotifierDatabase.getDb(context)

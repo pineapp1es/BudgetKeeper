@@ -1,9 +1,12 @@
 package com.pineapple.budgetnotifier.database
 
+import android.content.Context
+
 import com.pineapple.budgetnotifier.database.BudgetNotifierDatabase.Companion.getDb
 import com.pineapple.budgetnotifier.database.entities.Budget
 import com.pineapple.budgetnotifier.database.entities.Expense
 import java.util.Date
+
 
 data object Selected {
     var budget: Budget? = null
@@ -15,14 +18,14 @@ data object Cached {
     val expenses: MutableList<Expense> = mutableListOf()
 }
 
-fun getCollectiveBudget(): Budget {
+fun getCollectiveBudget(applicationContext: Context): Budget {
 
     var collectiveLimit = 0.0
     var collectiveSpent = 0.0
     var collectiveStartDate = Date()
     var collectiveEndDate = Date()
 
-    cacheAllBudgetData()
+    cacheAllBudgetData(applicationContext)
 
     for (budget in Cached.budgets) {
 	collectiveLimit += budget.limit
@@ -46,10 +49,10 @@ fun getCollectiveBudget(): Budget {
     return collectiveBudget
 }
 
-fun cacheAllBudgetData() {
-    val db = getDb()
+fun cacheAllBudgetData(applicationContext: Context) {
+    val db = getDb(applicationContext)
     Cached.budgets.addAll(
-	loadAllBudgets()
+	db.budgetDao().loadAllBudgets()
     )
 }
 
