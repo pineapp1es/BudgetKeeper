@@ -14,7 +14,6 @@ import com.pineapple.budgetnotifier.Views
 import com.pineapple.budgetnotifier.style.BudgetNotifierTheme
 import com.pineapple.budgetnotifier.view.ExpenseInfoView
 import com.pineapple.budgetnotifier.view.ExpensesView
-import com.pineapple.budgetnotifier.view.Home
 
 class MainActivity : ComponentActivity() {
     @RequiresApi(Build.VERSION_CODES.O)
@@ -23,7 +22,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
 
         setContent {
-            val view = remember { mutableStateOf(Views.HOME) }
+            val view = remember { mutableStateOf(Views.BUDGETLIST) }
             BudgetNotifierTheme {
                 MainScreen(view, applicationContext)
             }

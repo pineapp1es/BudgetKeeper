@@ -1,24 +1,24 @@
 package com.pineapple.budgetnotifier.database.access
 
-import androidx.room.Dao
-import androidx.room.Delete
-import androidx.room.Insert
-import androidx.room.Query
-import androidx.room.Update
+import androidx.room.*
 import com.pineapple.budgetnotifier.database.entities.Budget
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface BudgetDao {
 
     @Insert
-    fun insertBudgets(vararg budgets: Budget)
+    suspend fun insertBudgets(vararg budgets: Budget)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertOrReplaceBudgets(vararg budgets: Budget)
 
     @Update
-    fun updateBudgets(vararg budgets: Budget)
+    suspend fun updateBudgets(vararg budgets: Budget)
 
     @Delete
-    fun deleteBudgets(vararg budgets: Budget)
+    suspend fun deleteBudgets(vararg budgets: Budget)
 
     @Query("SELECT * FROM budget")
-    fun loadAllBudgets(): Array<Budget>
+    fun getAllBudgets(): Flow<Array<Budget>>
 }

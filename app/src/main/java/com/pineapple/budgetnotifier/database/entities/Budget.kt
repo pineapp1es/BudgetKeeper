@@ -1,5 +1,7 @@
 package com.pineapple.budgetnotifier.database.entities
 
+import com.pineapple.budgetnotifier.utils.getRandomString
+
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import java.util.Date
@@ -14,4 +16,22 @@ data class Budget(
     val spent: Double,
     val startDate: Date,
     val endDate: Date,
-)
+
+) {
+    companion object {
+
+	const val DEFAULTBUDGETIDLEN: Int = 10
+
+	fun newBudget(): Budget {
+	    return Budget(
+		id = getRandomString(DEFAULTBUDGETIDLEN),
+		name= "new-budget",
+		desc= "",
+		limit= 0.0,
+		spent= 0.0,
+		startDate= Date(),
+		endDate= Date(),
+	    )
+	}
+    }
+}

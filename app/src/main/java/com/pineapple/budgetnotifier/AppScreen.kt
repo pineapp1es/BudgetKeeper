@@ -1,16 +1,24 @@
 package com.pineapple.budgetnotifier
 
+import com.pineapple.budgetnotifier.database.Selected
+import com.pineapple.budgetnotifier.database.cacheAllBudgetData
+import com.pineapple.budgetnotifier.database.entities.Expense
+import com.pineapple.budgetnotifier.view.*
+import com.pineapple.budgetnotifier.database.BudgetNotifierDatabase
+
+import android.content.Context
 import android.os.Build
 import androidx.annotation.RequiresApi
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
@@ -19,18 +27,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.pineapple.budgetnotifier.Views
-import com.pineapple.budgetnotifier.view.BudgetInfoView
-import com.pineapple.budgetnotifier.view.BudgetsView
-import com.pineapple.budgetnotifier.view.ExpenseInfoView
-import com.pineapple.budgetnotifier.view.ExpensesView
-import com.pineapple.budgetnotifier.view.Home
-import com.pineapple.budgetnotifier.view.SettingsView
-import com.pineapple.budgetnotifier.database.BudgetNotifierDatabase
-import android.content.Context
-
-import com.pineapple.budgetnotifier.database.Selected
-import com.pineapple.budgetnotifier.database.entities.Expense
+import kotlinx.coroutines.launch
 
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -42,33 +39,32 @@ fun MainScreen(
 ) {
 
     val db = BudgetNotifierDatabase.getDb(context)
+
+    val coroutineScope = rememberCoroutineScope()
+    coroutineScope.launch {
+	cacheAllBudgetData(context)
+    }
+    
     Scaffold(
         bottomBar = { BottomBar(view, navController) }
     ) { innerPadding ->
         NavHost(
             navController = navController,
-            startDestination = Views.HOME.name,
-            modifier = Modifier.padding(innerPadding),
+            startDestination = Views.BUDGETLIST.name,
         ) {
-            composable(route = Views.HOME.name) {
-                Home(view, navController, db)
-            }
 
             composable(route = Views.BUDGETLIST.name) {
-                BudgetsView()
+                BudgetsView(navController)
             }
             composable(route = Views.BUDGETINFO.name) {
-                BudgetInfoView()
+                BudgetInfoView(db)
             }
 
             composable(route = Views.EXPENSELIST.name) {
-                ExpensesView(view, navController)
+                ExpensesView()
             }
             composable(route = Views.EXPENSEINFO.name) {
-                if (Selected.expense == null) Selected.expense =
-						  Expense.newExpense(Selected.budget?.id
-									 ?: "?budget?")
-                ExpenseInfoView(view, Selected.expense!!)
+                ExpenseInfoView()
             }
 
             composable(route = Views.SETTINGS.name) {
@@ -88,48 +84,19 @@ fun BottomBar(currentView: MutableState<Views>, navController: NavController) {
             modifier = Modifier
                 .padding(20.dp),
             onClick = {
-                if (currentView.value != Views.HOME) {
-                    currentView.value = Views.HOME
-                    navController.navigate(Views.HOME.name)
-                }
-            }) {
-            Icon(painterResource(R.drawable.baseline_home_24), "Home View")
-        }
-
-        IconButton(
-            modifier = Modifier
-                .padding(20.dp),
-            onClick = {
-                if (currentView.value != Views.BUDGETLIST) {
-                    currentView.value = Views.BUDGETLIST
-                    navController.navigate(Views.BUDGETLIST.name)
-                }
-            }) {
-            Icon(painterResource(R.drawable.baseline_account_balance_wallet_24), "Budgets View")
-        }
-
-        IconButton(
-            modifier = Modifier
-                .padding(20.dp),
-            onClick = {
-                if (currentView.value != Views.EXPENSELIST) {
-                    currentView.value = Views.EXPENSELIST
-                    navController.navigate(Views.EXPENSELIST.name)
-                }
-            }) {
-            Icon(painterResource(R.drawable.baseline_shopping_cart_24), "Transactions View")
-        }
-
-        IconButton(
-            modifier = Modifier
-                .padding(20.dp),
-            onClick = {
-                if (currentView.value != Views.SETTINGS) {
-                    currentView.value = Views.SETTINGS
-                    navController.navigate(Views.SETTINGS.name)
-                }
             }) {
             Icon(painterResource(R.drawable.baseline_settings_24), "Settings View")
         }
+
+	Text("Budgets")
+
+        IconButton(
+            modifier = Modifier
+                .padding(20.dp),
+            onClick = {
+            }) {
+            Icon(painterResource(R.drawable.baseline_arrow_forward_ios_24), "Switch to view")
+        }
+
     }
 }

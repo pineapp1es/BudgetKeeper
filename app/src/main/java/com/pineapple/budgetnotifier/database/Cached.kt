@@ -14,46 +14,16 @@ data object Selected {
 }
 
 data object Cached {
+    val budgetIds: MutableList<String> = mutableListOf()
     val budgets: MutableList<Budget> = mutableListOf()
     val expenses: MutableList<Expense> = mutableListOf()
 }
 
-fun getCollectiveBudget(applicationContext: Context): Budget {
-
-    var collectiveLimit = 0.0
-    var collectiveSpent = 0.0
-    var collectiveStartDate = Date()
-    var collectiveEndDate = Date()
-
-    cacheAllBudgetData(applicationContext)
-
-    for (budget in Cached.budgets) {
-	collectiveLimit += budget.limit
-	collectiveSpent += budget.spent
-	if (collectiveStartDate.time > budget.startDate.time)
-	    collectiveStartDate = budget.startDate
-	if (collectiveEndDate.time < budget.endDate.time)
-	    collectiveEndDate = budget.endDate
-    }
-
-    val collectiveBudget = Budget(
-	id="collective-budget-id-tmp",
-	name="collective budget",
-	desc="all budgets bundled in one",
-	limit=collectiveLimit,
-	spent=collectiveSpent,
-	startDate=collectiveStartDate,
-	endDate=collectiveEndDate,
-    )
-
-    return collectiveBudget
-}
-
-fun cacheAllBudgetData(applicationContext: Context) {
+suspend fun cacheAllBudgetData(applicationContext: Context) {
     val db = getDb(applicationContext)
-    Cached.budgets.addAll(
-	db.budgetDao().loadAllBudgets()
-    )
+    db.budgetDao().getAllBudgets().collect { budgets ->
+	Cached.budgets.addAll(budgets)
+    }
 }
 
 fun cacheAllExpenseData() {
