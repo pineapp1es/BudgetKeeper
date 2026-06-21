@@ -36,7 +36,7 @@ fun BudgetsView(budgets: List<Budget>, navController: NavHostController) {
 	    IconButton(
 		modifier = Modifier,
 		onClick = {
-		    navController.navigate(Views.BUDGETINFO.name)
+		    navController.navigate(Views.BUDGETINFO.name + "/")
 		}
 	    ) {
 		Icon(painterResource(R.drawable.baseline_add_24), "New budget")
@@ -48,7 +48,12 @@ fun BudgetsView(budgets: List<Budget>, navController: NavHostController) {
 	    ) {
 
 		items(budgets) { budget ->
-		    Card {
+		    Card (
+			modifier = Modifier,
+			onClick = {
+			    navController.navigate(Views.BUDGETINFO.name + "/${budget.id}")
+			}
+		    ) {
 			Text(budget.name)
 		    }
 		}

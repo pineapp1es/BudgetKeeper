@@ -11,7 +11,13 @@ class BudgetRepository(
     db: BudgetNotifierDatabase,
 ) {
 
-    var budgets: Flow<List<Budget>> = db.budgetDao().getAllBudgets()
-    var expenses: Flow<List<Expense>> = db.expenseDao().getAllExpenses()
+    val budgetDao = db.budgetDao()
+    val expenseDao = db.expenseDao()
 
+    var budgets: Flow<List<Budget>> = budgetDao.getAllBudgets()
+    var expenses: Flow<List<Expense>> = expenseDao.getAllExpenses()
+
+    suspend fun addOrUpdateBudget(budget: Budget) {
+	budgetDao.insertOrReplaceBudgets(budget)
+    }
 }

@@ -21,74 +21,71 @@ import java.util.Date
 import kotlinx.coroutines.launch
 
 @Composable
-fun BudgetInfoView() {
-
-//     // create states for text fields
-//     val idTextState = rememberTextFieldState(budget.id)
-//     val nameTextState = rememberTextFieldState(budget.name)
-//     val descTextState = rememberTextFieldState(budget.desc)
-//     val limitTextState = rememberTextFieldState(budget.limit.toString())
-//     val spentTextState = rememberTextFieldState(budget.spent.toString())
+fun BudgetInfoView(budget: Budget, onSave: (Budget) -> Unit) {
 
 
-//     Box(
-// 	modifier = Modifier
-// 	    .padding(10.dp)
-//     ){
-// 	Column (
-// 	    modifier = Modifier
-// 		.padding(20.dp),
-// 	){
+    // create states for text fields
+    val nameTextState = rememberTextFieldState(budget.name)
+    val descTextState = rememberTextFieldState(budget.desc)
+    val limitTextState = rememberTextFieldState(budget.limit.toString())
+    val spentTextState = rememberTextFieldState(budget.spent.toString())
 
-// 	    IconButton(
-// 		modifier = Modifier,
-// 		onClick = {
-// 		    val editedBudget = Budget(
-// 			id = idTextState.text.toString(),
-// 			name = nameTextState.text.toString(),
-// 			desc = descTextState.text.toString(),
-// 			limit = limitTextState.text.toString().toDouble(),
-// 			spent = spentTextState.text.toString().toDouble(),
-// 			startDate = Date(),
-// 			endDate = Date(),
-// 		    )
-// 		},
-// 	    ) {
-// 		Icon(painterResource(R.drawable.baseline_save_24), "Save Expense")
-// 	    }
 
-// 	    Column {
-// 		// id text field
-// 		TextField(
-// 		    state = idTextState,
-// 		    label = { Text("ID") },
-// 		)
+    Box(
+	modifier = Modifier
+	    .padding(10.dp)
+    ){
+	Column (
+	    modifier = Modifier
+		.padding(20.dp),
+	){
 
-// 		// name text field
-// 		TextField(
-// 		    state = nameTextState,
-// 		    label = { Text("Name") },
-// 		)
+	    IconButton(
+		modifier = Modifier,
+		onClick = {
+		    val editedBudget = Budget(
+			id = budget.id,
+			name = nameTextState.text.toString(),
+			desc = descTextState.text.toString(),
+			limit = limitTextState.text.toString().toDouble(),
+			spent = spentTextState.text.toString().toDouble(),
+			startDate = Date(),
+			endDate = Date(),
+		    )
 
-// 		// desc text field
-// 		TextField(
-// 		    state = descTextState,
-// 		    label = { Text("Description") },
-// 		)
+		    onSave(editedBudget)
+		},
+	    ) {
+		Icon(painterResource(R.drawable.baseline_save_24), "Save Expense")
+	    }
 
-// 		// limit text field
-// 		TextField(
-// 		    state = limitTextState,
-// 		    label = { Text("Limit") },
-// 		)
+	    Column {
 
-// 		// spent text field
-// 		TextField(
-// 		    state = spentTextState,
-// 		    label = { Text("Spent") },
-// 		)
+		// name text field
+		TextField(
+		    state = nameTextState,
+		    label = { Text("Name") },
+		)
 
-// 	    }
-// 	}
-//     }
+		// desc text field
+		TextField(
+		    state = descTextState,
+		    label = { Text("Description") },
+		)
+
+		// limit text field
+		TextField(
+		    state = limitTextState,
+		    label = { Text("Limit") },
+		)
+
+		// spent text field
+		TextField(
+		    state = spentTextState,
+		    label = { Text("Spent") },
+		)
+
+	    }
+	}
+    }
 }

@@ -8,7 +8,7 @@ import java.util.Date
 
 @Entity
 data class Budget(
-    @PrimaryKey val id: String,
+    @PrimaryKey(autoGenerate = true) val id: Long = 0,
 
     val name: String,
     val desc: String,
@@ -24,7 +24,6 @@ data class Budget(
 
 	fun newBudget(): Budget {
 	    return Budget(
-		id = getRandomString(DEFAULTBUDGETIDLEN),
 		name= "new-budget",
 		desc= "",
 		limit= 0.0,

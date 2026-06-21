@@ -39,9 +39,8 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             val view = remember { mutableStateOf(Views.BUDGETLIST) }
-	    val uiState = viewModel.uiState.collectAsStateWithLifecycle()
             BudgetNotifierTheme {
-                MainScreen(uiState)
+                MainScreen(viewModel)
             }
         }
     }

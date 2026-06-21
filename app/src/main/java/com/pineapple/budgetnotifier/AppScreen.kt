@@ -12,20 +12,24 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.pineapple.budgetnotifier.database.entities.Budget
 import com.pineapple.budgetnotifier.view.*
 
 
 @Composable
 fun MainScreen(
-    uiState: State<MainActivityUiState>,
+    viewModel: MainActivityViewModel,
     navController: NavHostController = rememberNavController(),
 ) {
+
+    val uiState = viewModel.uiState.collectAsStateWithLifecycle()
     
     Scaffold(
         bottomBar = { BottomBar(navController) }
@@ -39,8 +43,11 @@ fun MainScreen(
 		composable(route = Views.BUDGETLIST.name) {
 		    BudgetsView(uiState.value.budgets, navController)
 		}
-		composable(route = Views.BUDGETINFO.name) {
-		    // BudgetInfoView()
+		composable(route = Views.BUDGETINFO.name + "/{budgetId}") { backStackEntry ->
+		    val budgetId = backStackEntry.arguments?.getString("budgetId")?.toLongOrNull()
+		    val budget: Budget = uiState.value.budgets.find { it.id == budgetId }
+			?: Budget.newBudget()
+		    BudgetInfoView(budget, { updateBudget -> viewModel.addBudget(updateBudget) })
 		}
 
 		composable(route = Views.EXPENSELIST.name) {

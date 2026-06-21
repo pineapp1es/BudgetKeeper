@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 
 
 class MainActivityViewModel(
@@ -29,6 +30,12 @@ class MainActivityViewModel(
 	initialValue = MainActivityUiState(),
 	started = SharingStarted.WhileSubscribed(5_000),
     )
+
+    fun addBudget(budget: Budget) {
+	viewModelScope.launch {
+	    budgetRepo.addOrUpdateBudget(budget)
+	}
+    }
 }
 
 

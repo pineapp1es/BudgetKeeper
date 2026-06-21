@@ -19,8 +19,8 @@ const val EXPENSEIDLENGTH = 10
     ],
 )
 data class Expense(
-    @PrimaryKey val id: String,
-    val budgetId: String,
+    @PrimaryKey(autoGenerate = true) val id: Long = 0,
+    val budgetId: Long,
 
     val name: String,
     val reason: String,
@@ -28,9 +28,8 @@ data class Expense(
     val date: Date,
 ) {
     companion object {
-	fun newExpense(budgetId: String): Expense {
+	fun newExpense(budgetId: Long): Expense {
 	    return Expense(
-		id=budgetId+"-"+getRandomString(EXPENSEIDLENGTH),
 		budgetId=budgetId,
 		name="new-expense",
 		reason="expense-reason",
