@@ -41,12 +41,19 @@ fun MainScreen(
 	    ) {
 
 		composable(route = Views.BUDGETLIST.name) {
-		    BudgetsView(uiState.value.budgets, navController)
+		    BudgetsView(uiState.value.budgets,
+				onBudgetClick = { budgetId ->
+				    navController.navigate(Views.BUDGETINFO.name + "/${budgetId}")
+				})
 		}
+
 		composable(route = Views.BUDGETINFO.name + "/{budgetId}") { backStackEntry ->
+
 		    val budgetId = backStackEntry.arguments?.getString("budgetId")?.toLongOrNull()
+
 		    val budget: Budget = uiState.value.budgets.find { it.id == budgetId }
 			?: Budget.newBudget()
+
 		    BudgetInfoView(budget, { updateBudget -> viewModel.addBudget(updateBudget) })
 		}
 

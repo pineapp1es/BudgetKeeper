@@ -26,7 +26,7 @@ import com.pineapple.budgetnotifier.database.entities.Budget
 import androidx.compose.foundation.lazy.items
 
 @Composable
-fun BudgetsView(budgets: List<Budget>, navController: NavHostController) {
+fun BudgetsView(budgets: List<Budget>, onBudgetClick: (Long?) -> Unit) {
 
     Box(
 	modifier = Modifier
@@ -35,9 +35,7 @@ fun BudgetsView(budgets: List<Budget>, navController: NavHostController) {
 	Column {
 	    IconButton(
 		modifier = Modifier,
-		onClick = {
-		    navController.navigate(Views.BUDGETINFO.name + "/")
-		}
+		onClick = { onBudgetClick(null) }
 	    ) {
 		Icon(painterResource(R.drawable.baseline_add_24), "New budget")
 	    }
@@ -50,9 +48,7 @@ fun BudgetsView(budgets: List<Budget>, navController: NavHostController) {
 		items(budgets) { budget ->
 		    Card (
 			modifier = Modifier,
-			onClick = {
-			    navController.navigate(Views.BUDGETINFO.name + "/${budget.id}")
-			}
+			onClick = { onBudgetClick(budget.id) }
 		    ) {
 			Text(budget.name)
 		    }
