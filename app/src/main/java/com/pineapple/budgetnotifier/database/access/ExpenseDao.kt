@@ -6,6 +6,7 @@ import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
 import com.pineapple.budgetnotifier.database.entities.Expense
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface ExpenseDao {
@@ -20,8 +21,8 @@ interface ExpenseDao {
     fun deleteExpenses(vararg expenses: Expense)
 
     @Query("SELECT * FROM expense")
-    fun loadAllExpenses(): Array<Expense>
+    fun getAllExpenses(): Flow<List<Expense>>
 
     @Query("SELECT * FROM expense WHERE budgetId = :budgetId")
-    fun loadExpenseByBudgetId(budgetId: String): Array<Expense>
+    fun getExpensesByBudgetId(budgetId: String): Flow<List<Expense>>
 }

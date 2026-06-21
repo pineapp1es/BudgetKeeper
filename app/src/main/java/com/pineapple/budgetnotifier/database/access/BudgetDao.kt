@@ -20,5 +20,5 @@ interface BudgetDao {
     suspend fun deleteBudgets(vararg budgets: Budget)
 
     @Query("SELECT * FROM budget")
-    fun getAllBudgets(): Flow<Array<Budget>>
+    fun getAllBudgets(): Flow<List<Budget>>
 }

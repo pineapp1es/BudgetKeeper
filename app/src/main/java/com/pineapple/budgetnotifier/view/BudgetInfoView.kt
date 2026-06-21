@@ -2,7 +2,6 @@ package com.pineapple.budgetnotifier.view
 
 import androidx.compose.foundation.text.input.rememberTextFieldState
 import com.pineapple.budgetnotifier.database.entities.Budget
-import com.pineapple.budgetnotifier.database.Selected
 import com.pineapple.budgetnotifier.R
 import com.pineapple.budgetnotifier.database.BudgetNotifierDatabase
 
@@ -22,83 +21,74 @@ import java.util.Date
 import kotlinx.coroutines.launch
 
 @Composable
-fun BudgetInfoView(db: BudgetNotifierDatabase) {
+fun BudgetInfoView() {
 
-    // coroutine scope for accessing db
-    val coroutineScope = rememberCoroutineScope()
-
-    // load the selected budget or make new if none selected
-    val budget: Budget = Selected.budget ?: Budget.newBudget()
-
-    // create states for text fields
-    val idTextState = rememberTextFieldState(budget.id)
-    val nameTextState = rememberTextFieldState(budget.name)
-    val descTextState = rememberTextFieldState(budget.desc)
-    val limitTextState = rememberTextFieldState(budget.limit.toString())
-    val spentTextState = rememberTextFieldState(budget.spent.toString())
+//     // create states for text fields
+//     val idTextState = rememberTextFieldState(budget.id)
+//     val nameTextState = rememberTextFieldState(budget.name)
+//     val descTextState = rememberTextFieldState(budget.desc)
+//     val limitTextState = rememberTextFieldState(budget.limit.toString())
+//     val spentTextState = rememberTextFieldState(budget.spent.toString())
 
 
-    Box(
-	modifier = Modifier
-	    .padding(10.dp)
-    ){
-	Column (
-	    modifier = Modifier
-		.padding(20.dp),
-	){
+//     Box(
+// 	modifier = Modifier
+// 	    .padding(10.dp)
+//     ){
+// 	Column (
+// 	    modifier = Modifier
+// 		.padding(20.dp),
+// 	){
 
-	    IconButton(
-		modifier = Modifier,
-		onClick = {
-		    val editedBudget = Budget(
-			id = idTextState.text.toString(),
-			name = nameTextState.text.toString(),
-			desc = descTextState.text.toString(),
-			limit = limitTextState.text.toString().toDouble(),
-			spent = spentTextState.text.toString().toDouble(),
-			startDate = Date(),
-			endDate = Date(),
-		    )
-		    coroutineScope.launch {
-			db.budgetDao().insertOrReplaceBudgets(editedBudget)
-		    }
-		},
-	    ) {
-		Icon(painterResource(R.drawable.baseline_save_24), "Save Expense")
-	    }
+// 	    IconButton(
+// 		modifier = Modifier,
+// 		onClick = {
+// 		    val editedBudget = Budget(
+// 			id = idTextState.text.toString(),
+// 			name = nameTextState.text.toString(),
+// 			desc = descTextState.text.toString(),
+// 			limit = limitTextState.text.toString().toDouble(),
+// 			spent = spentTextState.text.toString().toDouble(),
+// 			startDate = Date(),
+// 			endDate = Date(),
+// 		    )
+// 		},
+// 	    ) {
+// 		Icon(painterResource(R.drawable.baseline_save_24), "Save Expense")
+// 	    }
 
-	    Column {
-		// id text field
-		TextField(
-		    state = idTextState,
-		    label = { Text("ID") },
-		)
+// 	    Column {
+// 		// id text field
+// 		TextField(
+// 		    state = idTextState,
+// 		    label = { Text("ID") },
+// 		)
 
-		// name text field
-		TextField(
-		    state = nameTextState,
-		    label = { Text("Name") },
-		)
+// 		// name text field
+// 		TextField(
+// 		    state = nameTextState,
+// 		    label = { Text("Name") },
+// 		)
 
-		// desc text field
-		TextField(
-		    state = descTextState,
-		    label = { Text("Description") },
-		)
+// 		// desc text field
+// 		TextField(
+// 		    state = descTextState,
+// 		    label = { Text("Description") },
+// 		)
 
-		// limit text field
-		TextField(
-		    state = limitTextState,
-		    label = { Text("Limit") },
-		)
+// 		// limit text field
+// 		TextField(
+// 		    state = limitTextState,
+// 		    label = { Text("Limit") },
+// 		)
 
-		// spent text field
-		TextField(
-		    state = nameTextState,
-		    label = { Text("Spent") },
-		)
+// 		// spent text field
+// 		TextField(
+// 		    state = spentTextState,
+// 		    label = { Text("Spent") },
+// 		)
 
-	    }
-	}
-    }
+// 	    }
+// 	}
+//     }
 }

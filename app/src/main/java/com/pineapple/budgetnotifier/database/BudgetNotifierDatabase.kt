@@ -27,13 +27,12 @@ abstract class BudgetNotifierDatabase(): RoomDatabase() {
 
             return db ?: synchronized(this) {
 
-                val newdb: BudgetNotifierDatabase = Room.databaseBuilder(
-                    context,
+                db ?: Room.databaseBuilder(
+                    context.applicationContext,
                     BudgetNotifierDatabase::class.java, "budget-notifier"
-                ).build()
-                db = newdb
-
-                newdb
+                ).build().also {
+		    db = it
+		}
             }
 
         }
