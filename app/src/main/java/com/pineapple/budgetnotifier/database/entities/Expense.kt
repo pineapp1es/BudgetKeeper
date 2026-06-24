@@ -28,7 +28,7 @@ data class Expense(
     val date: Date,
 ) {
     companion object {
-	fun newExpense(budgetId: Long): Expense {
+	fun newExpense(budgetId: Long = 0): Expense {
 	    return Expense(
 		budgetId=budgetId,
 		name="new-expense",

@@ -20,6 +20,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.pineapple.budgetnotifier.database.entities.Budget
+import com.pineapple.budgetnotifier.database.entities.Expense
 import com.pineapple.budgetnotifier.view.*
 
 
@@ -40,13 +41,13 @@ fun MainScreen(
 		startDestination = Views.BUDGETLIST.name,
 	    ) {
 
+		// budgets
 		composable(route = Views.BUDGETLIST.name) {
 		    BudgetsView(uiState.value.budgets,
 				onBudgetClick = { budgetId ->
 				    navController.navigate(Views.BUDGETINFO.name + "/${budgetId}")
 				})
 		}
-
 		composable(route = Views.BUDGETINFO.name + "/{budgetId}") { backStackEntry ->
 
 		    val budgetId = backStackEntry.arguments?.getString("budgetId")?.toLongOrNull()
@@ -57,13 +58,24 @@ fun MainScreen(
 		    BudgetInfoView(budget, { updateBudget -> viewModel.addBudget(updateBudget) })
 		}
 
+		// expenses
 		composable(route = Views.EXPENSELIST.name) {
-		    ExpensesView()
+		    ExpensesView(uiState.value.expenses,
+				 onExpenseClick = { expenseId ->
+				     navController.navigate(Views.EXPENSEINFO.name + "/${expenseId}")
+				 })
 		}
-		composable(route = Views.EXPENSEINFO.name) {
-		    ExpenseInfoView()
+		    composable(route = Views.EXPENSEINFO.name + "/{expenseId}") { backStackEntry ->
+		    val expenseId = backStackEntry.arguments?.getString("expenseId")?.toLongOrNull()
+
+		    val expense: Expense = uiState.value.expenses.find { it.id == expenseId }
+			?: Expense.newExpense()
+
+		    ExpenseInfoView(expense,
+{ updateExpense -> viewModel.addExpense(updateExpense) })
 		}
 
+		//other
 		composable(route = Views.SETTINGS.name) {
 		    SettingsView()
 		}
@@ -90,12 +102,16 @@ fun BottomBar(navController: NavController) {
             Icon(painterResource(R.drawable.baseline_settings_24), "Settings View")
         }
 
-	Text("Budgets")
+	Text(currentRoute ?: "idk")
 
         IconButton(
             modifier = Modifier
                 .padding(20.dp),
             onClick = {
+		if (currentRoute == Views.BUDGETLIST.name)
+		    navController.navigate(Views.EXPENSELIST.name)
+		else
+		    navController.navigate(Views.BUDGETLIST.name)
             }) {
             Icon(painterResource(R.drawable.baseline_arrow_forward_ios_24), "Switch to view")
         }

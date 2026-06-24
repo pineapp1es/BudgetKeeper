@@ -36,6 +36,12 @@ class MainActivityViewModel(
 	    budgetRepo.addOrUpdateBudget(budget)
 	}
     }
+
+    fun addExpense(expense: Expense) {
+	viewModelScope.launch {
+	    budgetRepo.addOrUpdateExpense(expense)
+	}
+    }
 }
 
 

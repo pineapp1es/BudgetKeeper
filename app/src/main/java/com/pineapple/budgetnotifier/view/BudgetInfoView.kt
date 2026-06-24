@@ -23,7 +23,6 @@ import kotlinx.coroutines.launch
 @Composable
 fun BudgetInfoView(budget: Budget, onSave: (Budget) -> Unit) {
 
-
     // create states for text fields
     val nameTextState = rememberTextFieldState(budget.name)
     val descTextState = rememberTextFieldState(budget.desc)

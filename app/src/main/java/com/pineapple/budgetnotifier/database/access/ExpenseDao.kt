@@ -1,10 +1,6 @@
 package com.pineapple.budgetnotifier.database.access
 
-import androidx.room.Dao
-import androidx.room.Delete
-import androidx.room.Insert
-import androidx.room.Query
-import androidx.room.Update
+import androidx.room.*
 import com.pineapple.budgetnotifier.database.entities.Expense
 import kotlinx.coroutines.flow.Flow
 
@@ -12,13 +8,15 @@ import kotlinx.coroutines.flow.Flow
 interface ExpenseDao {
 
     @Insert
-    fun insertExpenses(vararg expenses: Expense)
+    suspend fun insertExpenses(vararg expenses: Expense)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertOrReplaceExpenses(vararg expenses: Expense)
 
     @Update
-    fun updateExpenses(vararg  expenses: Expense)
+    suspend fun updateExpenses(vararg  expenses: Expense)
 
     @Delete
-    fun deleteExpenses(vararg expenses: Expense)
+    suspend fun deleteExpenses(vararg expenses: Expense)
 
     @Query("SELECT * FROM expense")
     fun getAllExpenses(): Flow<List<Expense>>

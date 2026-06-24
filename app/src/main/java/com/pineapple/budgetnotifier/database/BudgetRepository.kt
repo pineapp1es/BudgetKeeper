@@ -20,4 +20,8 @@ class BudgetRepository(
     suspend fun addOrUpdateBudget(budget: Budget) {
 	budgetDao.insertOrReplaceBudgets(budget)
     }
+
+    suspend fun addOrUpdateExpense(expense: Expense) {
+	expenseDao.insertOrReplaceExpenses(expense)
+    }
 }

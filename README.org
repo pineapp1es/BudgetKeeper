@@ -1,0 +1,22 @@
+#+title: BudgetNotifier
+
+Android app for budget tracking and management
+
+very WIP
+
+* Features
+- Create budgets
+- Edit existing budgets
+- state management with view models
+- view navigation with navhost
+- Local data persistence using Room Database
+
+** Todo
+- Creation and edit expenses
+- Budget notifications and reminders
+- Spending tracking
+- Budget progress visualization
+
+* Tech used
+- Kotlin
+- Jetpack Compose
