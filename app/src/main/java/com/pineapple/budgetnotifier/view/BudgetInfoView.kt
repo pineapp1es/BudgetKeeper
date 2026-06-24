@@ -55,7 +55,7 @@ fun BudgetInfoView(budget: Budget, onSave: (Budget) -> Unit) {
 		    onSave(editedBudget)
 		},
 	    ) {
-		Icon(painterResource(R.drawable.baseline_save_24), "Save Expense")
+		Icon(painterResource(R.drawable.baseline_save_24), "Save Budget")
 	    }
 
 	    Column {
