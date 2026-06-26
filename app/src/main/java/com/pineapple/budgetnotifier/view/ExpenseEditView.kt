@@ -21,7 +21,7 @@ import java.util.Date
 import androidx.compose.foundation.text.input.rememberTextFieldState
 
 @Composable
-fun ExpenseInfoView(expense: Expense, onSave: (Expense) -> Unit) {
+fun ExpenseEditView(expense: Expense, onSave: (Expense) -> Unit) {
 
     // create states for text fields
     val budgetIdTextState = rememberTextFieldState(expense.budgetId.toString())

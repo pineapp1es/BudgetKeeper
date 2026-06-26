@@ -30,10 +30,12 @@ fun MainScreen(
     navController: NavHostController = rememberNavController(),
 ) {
 
-    val uiState = viewModel.uiState.collectAsStateWithLifecycle()
+    val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
+
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
     
     Scaffold(
-        bottomBar = { BottomBar(navController) }
+        bottomBar = { BottomBar(navBackStackEntry?.destination?.route, { route -> navController.navigate(route) }) }
     ) { innerPadding ->
 	Box( modifier= Modifier.padding(innerPadding) ) {
 	    NavHost(
@@ -43,36 +45,55 @@ fun MainScreen(
 
 		// budgets
 		composable(route = Views.BUDGETLIST.name) {
-		    BudgetsView(uiState.value.budgets,
+		    BudgetsView(uiState.budgets,
 				onBudgetClick = { budgetId ->
 				    navController.navigate(Views.BUDGETINFO.name + "/${budgetId}")
 				})
 		}
+		composable(route = Views.BUDGETEDIT.name + "/{budgetId}") { backStackEntry ->
+
+		    val budgetId = backStackEntry.arguments?.getString("budgetId")?.toLongOrNull()
+		    val budget = uiState.getBudgetByIdOrNew(budgetId)
+
+		    BudgetEditView(budget, { updateBudget -> viewModel.addBudget(updateBudget) })
+		}
+
 		composable(route = Views.BUDGETINFO.name + "/{budgetId}") { backStackEntry ->
 
 		    val budgetId = backStackEntry.arguments?.getString("budgetId")?.toLongOrNull()
+		    val budget = uiState.getBudgetByIdOrNew(budgetId)
 
-		    val budget: Budget = uiState.value.budgets.find { it.id == budgetId }
-			?: Budget.newBudget()
-
-		    BudgetInfoView(budget, { updateBudget -> viewModel.addBudget(updateBudget) })
+		    BudgetInfoView(budget = budget,
+				   expenses =  uiState.expenses,
+				   onBudgetEditClick = { budgetId ->
+				       navController.navigate(Views.BUDGETEDIT.name +
+								  "/${budgetId}")
+				   },
+				   onExpenseClick = { expenseId, budgetId ->
+				       val expense = uiState.getExpenseByIdOrNew(expenseId, budgetId)
+				       navController.navigate(Views.EXPENSEEDIT.name +
+								  "/${expense.id}")
+				   }
+		    )
 		}
 
 		// expenses
 		composable(route = Views.EXPENSELIST.name) {
-		    ExpensesView(uiState.value.expenses,
+		    ExpensesView(uiState.expenses,
 				 onExpenseClick = { expenseId ->
-				     navController.navigate(Views.EXPENSEINFO.name + "/${expenseId}")
+				     navController.navigate(Views.EXPENSEEDIT.name + "/${expenseId}")
 				 })
 		}
-		    composable(route = Views.EXPENSEINFO.name + "/{expenseId}") { backStackEntry ->
+
+		composable(route = Views.EXPENSEEDIT.name + "/{expenseId}") { backStackEntry ->
+
 		    val expenseId = backStackEntry.arguments?.getString("expenseId")?.toLongOrNull()
+		    val expenseOrNull = uiState.getExpenseByIdOrNull(expenseId)
+		    val expense = uiState.getExpenseByIdOrNew(expenseOrNull?.id, expenseOrNull?.budgetId)
 
-		    val expense: Expense = uiState.value.expenses.find { it.id == expenseId }
-			?: Expense.newExpense()
 
-		    ExpenseInfoView(expense,
-{ updateExpense -> viewModel.addExpense(updateExpense) })
+
+		    ExpenseEditView(expense, { updateExpense -> viewModel.addExpense(updateExpense) })
 		}
 
 		//other
@@ -85,11 +106,8 @@ fun MainScreen(
 }
 
 @Composable
-fun BottomBar(navController: NavController) {
-    val navBackStackEntry by navController.currentBackStackEntryAsState()
+fun BottomBar(currentRoute: String?, navigate: (String) -> Unit) {
 
-    val currentRoute =
-        navBackStackEntry?.destination?.route
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -98,6 +116,7 @@ fun BottomBar(navController: NavController) {
             modifier = Modifier
                 .padding(20.dp),
             onClick = {
+		navigate(Views.SETTINGS.name)
             }) {
             Icon(painterResource(R.drawable.baseline_settings_24), "Settings View")
         }
@@ -109,9 +128,9 @@ fun BottomBar(navController: NavController) {
                 .padding(20.dp),
             onClick = {
 		if (currentRoute == Views.BUDGETLIST.name)
-		    navController.navigate(Views.EXPENSELIST.name)
+		    navigate(Views.EXPENSELIST.name)
 		else
-		    navController.navigate(Views.BUDGETLIST.name)
+		    navigate(Views.BUDGETLIST.name)
             }) {
             Icon(painterResource(R.drawable.baseline_arrow_forward_ios_24), "Switch to view")
         }

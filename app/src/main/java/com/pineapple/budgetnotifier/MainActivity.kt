@@ -16,8 +16,6 @@ import com.pineapple.budgetnotifier.Views
 import com.pineapple.budgetnotifier.database.BudgetNotifierDatabase
 import com.pineapple.budgetnotifier.database.BudgetRepository
 import com.pineapple.budgetnotifier.style.BudgetNotifierTheme
-import com.pineapple.budgetnotifier.view.ExpenseInfoView
-import com.pineapple.budgetnotifier.view.ExpensesView
 
 class MainActivity : ComponentActivity() {
 

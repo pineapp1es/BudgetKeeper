@@ -42,8 +42,8 @@ class MainActivityViewModel(
 	    budgetRepo.addOrUpdateExpense(expense)
 	}
     }
-}
 
+}
 
 class MainActivityViewModelFactory(
     private val repository: BudgetRepository
@@ -67,4 +67,24 @@ data class MainActivityUiState (
     val isLoading: Boolean = true,
     val budgets: List<Budget> = listOf() ,
     val expenses: List<Expense> = listOf(),
-)
+) {
+    fun getBudgetByIdOrNew(budgetId: Long?): Budget {
+	return budgets.find { it.id == budgetId }
+	    ?: Budget.newBudget()
+    }
+
+    fun getExpenseByIdOrNew(expenseId: Long?, budgetId: Long? ): Expense {
+	return expenses.find { it.id == expenseId }
+	    ?: Expense.newExpense(budgetId ?: mostRecentlyUsedBudgetId())
+    }
+
+    fun getExpenseByIdOrNull(expenseId: Long?): Expense? {
+	return expenses.find { it.id == expenseId }
+    }
+
+    fun mostRecentlyUsedBudgetId(): Long {
+	val mostRecentExpense: Expense? = expenses.minByOrNull { it.date }
+
+	return mostRecentExpense?.budgetId ?: 0
+    }
+}
