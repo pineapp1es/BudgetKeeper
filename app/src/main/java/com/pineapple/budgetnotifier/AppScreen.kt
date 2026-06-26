@@ -46,6 +46,9 @@ fun MainScreen(
 		// budgets
 		composable(route = Views.BUDGETLIST.name) {
 		    BudgetsView(uiState.budgets,
+				onNewClick = { 
+				    navController.navigate(Views.BUDGETEDIT.name + "/${null}")
+				},
 				onBudgetClick = { budgetId ->
 				    navController.navigate(Views.BUDGETINFO.name + "/${budgetId}")
 				})
@@ -88,8 +91,7 @@ fun MainScreen(
 		composable(route = Views.EXPENSEEDIT.name + "/{expenseId}") { backStackEntry ->
 
 		    val expenseId = backStackEntry.arguments?.getString("expenseId")?.toLongOrNull()
-		    val expenseOrNull = uiState.getExpenseByIdOrNull(expenseId)
-		    val expense = uiState.getExpenseByIdOrNew(expenseOrNull?.id, expenseOrNull?.budgetId)
+		    val expense = uiState.getExpenseByIdOrNew(expenseId, null)
 
 
 

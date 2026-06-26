@@ -26,7 +26,7 @@ import com.pineapple.budgetnotifier.database.entities.Budget
 import androidx.compose.foundation.lazy.items
 
 @Composable
-fun BudgetsView(budgets: List<Budget>, onBudgetClick: (Long?) -> Unit) {
+fun BudgetsView(budgets: List<Budget>, onNewClick: () -> Unit, onBudgetClick: (Long?) -> Unit) {
 
     Box(
 	modifier = Modifier
@@ -35,7 +35,7 @@ fun BudgetsView(budgets: List<Budget>, onBudgetClick: (Long?) -> Unit) {
 	Column {
 	    IconButton(
 		modifier = Modifier,
-		onClick = { onBudgetClick(null) }
+		onClick = { onNewClick() }
 	    ) {
 		Icon(painterResource(R.drawable.baseline_add_24), "New budget")
 	    }
