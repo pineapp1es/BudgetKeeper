@@ -87,4 +87,8 @@ data class MainActivityUiState (
 
 	return mostRecentExpense?.budgetId ?: 0
     }
+
+    fun getExpensesByBudgetId(budgetId: Long): List<Expense> {
+	return expenses.filter { it.budgetId == budgetId }
+    }
 }

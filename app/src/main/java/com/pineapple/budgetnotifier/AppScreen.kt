@@ -1,5 +1,9 @@
 package com.pineapple.budgetnotifier
 
+import com.pineapple.budgetnotifier.database.entities.Budget
+import com.pineapple.budgetnotifier.database.entities.Expense
+import com.pineapple.budgetnotifier.view.*
+
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -19,9 +23,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.pineapple.budgetnotifier.database.entities.Budget
-import com.pineapple.budgetnotifier.database.entities.Expense
-import com.pineapple.budgetnotifier.view.*
 
 
 @Composable
@@ -63,19 +64,19 @@ fun MainScreen(
 
 		composable(route = Views.BUDGETINFO.name + "/{budgetId}") { backStackEntry ->
 
-		    val budgetId = backStackEntry.arguments?.getString("budgetId")?.toLongOrNull()
+		    val budgetId = backStackEntry.arguments?.getString("budgetId")!!.toLong()
 		    val budget = uiState.getBudgetByIdOrNew(budgetId)
+		    val expenses = uiState.getExpensesByBudgetId(budgetId)
 
 		    BudgetInfoView(budget = budget,
-				   expenses =  uiState.expenses,
+				   expenses =  expenses,
 				   onBudgetEditClick = { budgetId ->
 				       navController.navigate(Views.BUDGETEDIT.name +
 								  "/${budgetId}")
 				   },
 				   onExpenseClick = { expenseId, budgetId ->
-				       val expense = uiState.getExpenseByIdOrNew(expenseId, budgetId)
 				       navController.navigate(Views.EXPENSEEDIT.name +
-								  "/${expense.id}")
+								  "/${expenseId}/${budgetId}")
 				   }
 		    )
 		}
@@ -93,7 +94,13 @@ fun MainScreen(
 		    val expenseId = backStackEntry.arguments?.getString("expenseId")?.toLongOrNull()
 		    val expense = uiState.getExpenseByIdOrNew(expenseId, null)
 
+		    ExpenseEditView(expense, { updateExpense -> viewModel.addExpense(updateExpense) })
+		}
+		composable(route = Views.EXPENSEEDIT.name + "/{expenseId}/{budgetId}") { backStackEntry ->
 
+		    val expenseId = backStackEntry.arguments?.getString("expenseId")?.toLongOrNull()
+		    val budgetId = backStackEntry.arguments?.getString("budgetId")?.toLongOrNull()
+		    val expense = uiState.getExpenseByIdOrNew(expenseId, budgetId)
 
 		    ExpenseEditView(expense, { updateExpense -> viewModel.addExpense(updateExpense) })
 		}
