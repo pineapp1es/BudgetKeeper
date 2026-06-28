@@ -37,7 +37,7 @@ fun BudgetInfoView(budget: Budget,
 
     Box {
 	Column {
-	    BudgetSection(budget)
+	    BudgetSection(budget, onBudgetEditClick)
 	    ExpensesSection(expenses, budget.id, onExpenseClick)
 	}
     }
@@ -45,9 +45,16 @@ fun BudgetInfoView(budget: Budget,
 }
 
 @Composable
-fun BudgetSection(budget: Budget) {
+fun BudgetSection(budget: Budget, onBudgetEditClick: (Long?) -> Unit) {
 
     Column(modifier = Modifier.offset(x = 80.dp, y = 20.dp)) {
+	IconButton(
+	    modifier = Modifier,
+	    onClick = { onBudgetEditClick(budget.id) }
+	) {
+	    Icon(painterResource(R.drawable.baseline_edit_24), "Edit Budget")
+	}
+
 	Row(
             modifier = Modifier
 		.fillMaxWidth()

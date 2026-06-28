@@ -15,11 +15,25 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import java.util.Date
+import java.time.LocalDate
+import java.time.ZoneId
 import androidx.compose.foundation.text.input.rememberTextFieldState
+import androidx.compose.material3.TimePicker
+import androidx.compose.material3.TimePickerState
+import androidx.compose.material3.rememberTimePickerState
+import androidx.compose.material3.DatePicker
+import androidx.compose.material3.DatePickerState
+import androidx.compose.material3.getSelectedDate
+import androidx.compose.material3.rememberDatePickerState
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.ExperimentalMaterial3Api
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ExpenseEditView(expense: Expense, onSave: (Expense) -> Unit) {
 
@@ -28,7 +42,11 @@ fun ExpenseEditView(expense: Expense, onSave: (Expense) -> Unit) {
     val nameTextState = rememberTextFieldState(expense.name)
     val reasonTextState = rememberTextFieldState(expense.reason)
     val costTextState = rememberTextFieldState(expense.cost.toString())
-
+    val date: LocalDate = expense.date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate()
+    val dateState = rememberDatePickerState(date)
+    val timeH: Int = expense.date.getHours()
+    val timeM: Int = expense.date.getMinutes()
+    val timeState = rememberTimePickerState(timeH, timeM)
 
     Box(
 	modifier = Modifier
@@ -42,13 +60,16 @@ fun ExpenseEditView(expense: Expense, onSave: (Expense) -> Unit) {
 	    IconButton(
 		modifier = Modifier,
 		onClick = {
+		    val newDate = Date.from(dateState.getSelectedDate()!!.atStartOfDay(ZoneId.systemDefault()).toInstant())
+		    newDate.setHours(timeState.hour)
+		    newDate.setMinutes(timeState.minute)
 		    val editedExpense = Expense(
 			id = expense.id,
 			budgetId = budgetIdTextState.text.toString().toLong(),
 			name = nameTextState.text.toString(),
 			reason = reasonTextState.text.toString(),
 			cost = costTextState.text.toString().toDouble(),
-			date = Date(),
+			date = newDate,
 		    )
 
 		    onSave(editedExpense)
@@ -57,7 +78,10 @@ fun ExpenseEditView(expense: Expense, onSave: (Expense) -> Unit) {
 		Icon(painterResource(R.drawable.baseline_save_24), "Save Expense")
 	    }
 
-	    Column {
+	    Column (
+		modifier = Modifier
+		    .verticalScroll(rememberScrollState()),
+	    ){
 
 		// budgetid text field
 		TextField(
@@ -81,6 +105,18 @@ fun ExpenseEditView(expense: Expense, onSave: (Expense) -> Unit) {
 		TextField(
 		    state = costTextState,
 		    label = { Text("Cost") },
+		)
+
+		DatePicker(
+		    modifier = Modifier
+			// .verticalScroll(rememberScrollState())
+			  ,
+		    state = dateState,
+		)
+
+		TimePicker(
+		    modifier = Modifier,
+		    state = timeState,
 		)
 
 	    }

@@ -1,6 +1,5 @@
 package com.pineapple.budgetnotifier.view
 
-import androidx.compose.foundation.text.input.rememberTextFieldState
 import com.pineapple.budgetnotifier.database.entities.Budget
 import com.pineapple.budgetnotifier.R
 import com.pineapple.budgetnotifier.database.BudgetNotifierDatabase
@@ -11,6 +10,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
+import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.rememberCoroutineScope
@@ -18,7 +18,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import java.util.Date
+import java.time.LocalDate
+import java.time.ZoneId
 import kotlinx.coroutines.launch
+import androidx.compose.material3.DateRangePicker
+import androidx.compose.material3.DateRangePickerState
+import androidx.compose.material3.getSelectedEndDate
+import androidx.compose.material3.getSelectedStartDate
+import androidx.compose.material3.rememberDateRangePickerState
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+
 
 @Composable
 fun BudgetEditView(budget: Budget, onSave: (Budget) -> Unit) {
@@ -28,6 +38,9 @@ fun BudgetEditView(budget: Budget, onSave: (Budget) -> Unit) {
     val descTextState = rememberTextFieldState(budget.desc)
     val limitTextState = rememberTextFieldState(budget.limit.toString())
     val spentTextState = rememberTextFieldState(budget.spent.toString())
+    val startDate: LocalDate = budget.startDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate(); 
+    val endDate: LocalDate = budget.endDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate(); 
+    val dateRangeState = rememberDateRangePickerState(startDate, endDate);
 
 
     Box(
@@ -48,8 +61,8 @@ fun BudgetEditView(budget: Budget, onSave: (Budget) -> Unit) {
 			desc = descTextState.text.toString(),
 			limit = limitTextState.text.toString().toDouble(),
 			spent = spentTextState.text.toString().toDouble(),
-			startDate = Date(),
-			endDate = Date(),
+			startDate = Date.from(dateRangeState.getSelectedStartDate()!!.atStartOfDay(ZoneId.systemDefault()).toInstant()),
+			endDate = Date.from(dateRangeState.getSelectedEndDate()!!.atStartOfDay(ZoneId.systemDefault()).toInstant()),
 		    )
 
 		    onSave(editedBudget)
@@ -82,6 +95,14 @@ fun BudgetEditView(budget: Budget, onSave: (Budget) -> Unit) {
 		TextField(
 		    state = spentTextState,
 		    label = { Text("Spent") },
+		)
+
+		// date range picker !!
+		DateRangePicker(
+		    modifier = Modifier,
+		    state = dateRangeState,
+		    title = { Text("Budget Date Range") },
+		    showModeToggle = true,
 		)
 
 	    }

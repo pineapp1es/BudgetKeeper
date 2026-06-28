@@ -3,6 +3,8 @@ package com.pineapple.budgetnotifier.view
 import com.pineapple.budgetnotifier.R
 import com.pineapple.budgetnotifier.Views
 
+import kotlin.math.min
+
 import android.content.Context
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -50,7 +52,13 @@ fun BudgetsView(budgets: List<Budget>, onNewClick: () -> Unit, onBudgetClick: (L
 			modifier = Modifier,
 			onClick = { onBudgetClick(budget.id) }
 		    ) {
-			Text(budget.name)
+			Column {
+			    Text(budget.name)
+			    Text(budget.desc.substring(0, min(budget.desc.length, 10)))
+			    Text(budget.limit.toString())
+			    Text("-" + budget.spent.toString())
+			    Text(budget.startDate.toString() + " to " + budget.endDate.toString())
+			}
 		    }
 		}
 

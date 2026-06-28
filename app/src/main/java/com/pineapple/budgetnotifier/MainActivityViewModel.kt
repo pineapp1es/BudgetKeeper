@@ -83,7 +83,7 @@ data class MainActivityUiState (
     }
 
     fun mostRecentlyUsedBudgetId(): Long {
-	val mostRecentExpense: Expense? = expenses.minByOrNull { it.date }
+	val mostRecentExpense: Expense? = expenses.maxByOrNull { it.date }
 
 	return mostRecentExpense?.budgetId ?: 0
     }
