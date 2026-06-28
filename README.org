@@ -10,9 +10,9 @@ very WIP
 - state management with view models
 - view navigation with navhost
 - Local data persistence using Room Database
+- Create and edit expenses
 
 ** Todo
-- Creation and edit expenses
 - Budget notifications and reminders
 - Spending tracking
 - Budget progress visualization
