@@ -19,6 +19,13 @@ interface BudgetDao {
     @Delete
     suspend fun deleteBudgets(vararg budgets: Budget)
 
+    @Query("""
+UPDATE Budget
+SET spent = spent + :amount
+WHERE id = :id
+	       """)
+    suspend fun changeSpent(id: Long, amount: Double)
+
     @Query("SELECT * FROM budget")
     fun getAllBudgets(): Flow<List<Budget>>
 }

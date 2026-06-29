@@ -31,14 +31,32 @@ class MainActivityViewModel(
 	started = SharingStarted.WhileSubscribed(5_000),
     )
 
-    fun addBudget(budget: Budget) {
+    fun correctBudgetSpent() {
+	viewModelScope.launch {
+	    budgetRepo.correctAllBudgets()
+	}
+    }
+
+    fun addOrUpdateBudget(budget: Budget) {
 	viewModelScope.launch {
 	    budgetRepo.addOrUpdateBudget(budget)
 	}
     }
 
-    fun addExpense(expense: Expense) {
+    fun addOrUpdateExpense(expense: Expense) {
 	viewModelScope.launch {
+	    // val oldExpense = uiState.value.getExpenseByIdOrNew(expense.id)
+	    // val oldBudget = uiState.value.getBudgetByIdOrNew(expense.budgetId)
+	    // if (oldExpense.budgetId == expense.budgetId) {
+	    // 	val newBudget = Budget(oldBudget, oldBudget.spent - oldExpense.cost + expense.cost)
+	    // 	addOrUpdateBudget(newBudget)
+	    // } else {
+	    // 	val newOldBudget = Budget(oldBudget, oldBudget.spent - oldExpense.cost)
+	    // 	addOrUpdateBudget(newOldBudget)
+	    // 	val toUpdateBudget = uiState.value.getBudgetByIdOrNew(expense.budgetId)
+	    // 	val updatedBudget = Budget(toUpdateBudget, toUpdateBudget.spent + expense.cost)
+	    // 	addOrUpdateBudget(updatedBudget)
+	    // }
 	    budgetRepo.addOrUpdateExpense(expense)
 	}
     }

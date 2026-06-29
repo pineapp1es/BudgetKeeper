@@ -18,12 +18,22 @@ data class Budget(
     val endDate: Date,
 
 ) {
+    constructor(budget: Budget, spent: Double):
+	this(
+	    budget.id,
+	    budget.name,
+	    budget.desc,
+	    budget.limit,
+	    spent,
+	    budget.startDate,
+	    budget.endDate,
+	)
+
     companion object {
 
-	const val DEFAULTBUDGETIDLEN: Int = 10
-
-	fun newBudget(): Budget {
+	fun newBudget(id: Long = 0): Budget {
 	    return Budget(
+		id = id,
 		name= "new-budget",
 		desc= "",
 		limit= 0.0,

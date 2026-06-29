@@ -22,5 +22,16 @@ interface ExpenseDao {
     fun getAllExpenses(): Flow<List<Expense>>
 
     @Query("SELECT * FROM expense WHERE budgetId = :budgetId")
-    fun getExpensesByBudgetId(budgetId: String): Flow<List<Expense>>
+    suspend fun getExpensesByBudgetId(budgetId: Long): List<Expense>
+
+    @Query("SELECT * FROM expense WHERE id = :id")
+    suspend fun getExpenseById(id: Long): Expense?
+
+
+    @Query("""
+SELECT COALESCE(SUM(cost), 0)
+FROM expense
+WHERE budgetId = :budgetId
+	    """)
+    suspend fun getTotalSpentByBudget(budgetId: Long): Double
 }

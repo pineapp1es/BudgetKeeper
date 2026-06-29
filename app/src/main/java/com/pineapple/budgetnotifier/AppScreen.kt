@@ -31,6 +31,8 @@ fun MainScreen(
     navController: NavHostController = rememberNavController(),
 ) {
 
+    viewModel.correctBudgetSpent()
+
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
 
     val navBackStackEntry by navController.currentBackStackEntryAsState()
@@ -59,7 +61,7 @@ fun MainScreen(
 		    val budgetId = backStackEntry.arguments?.getString("budgetId")?.toLongOrNull()
 		    val budget = uiState.getBudgetByIdOrNew(budgetId)
 
-		    BudgetEditView(budget, { updateBudget -> viewModel.addBudget(updateBudget) })
+		    BudgetEditView(budget, { updateBudget -> viewModel.addOrUpdateBudget(updateBudget) })
 		}
 
 		composable(route = Views.BUDGETINFO.name + "/{budgetId}") { backStackEntry ->
@@ -94,7 +96,7 @@ fun MainScreen(
 		    val expenseId = backStackEntry.arguments?.getString("expenseId")?.toLongOrNull()
 		    val expense = uiState.getExpenseByIdOrNew(expenseId, null)
 
-		    ExpenseEditView(expense, { updateExpense -> viewModel.addExpense(updateExpense) })
+		    ExpenseEditView(expense, { updateExpense -> viewModel.addOrUpdateExpense(updateExpense) })
 		}
 		composable(route = Views.EXPENSEEDIT.name + "/{expenseId}/{budgetId}") { backStackEntry ->
 
@@ -102,7 +104,7 @@ fun MainScreen(
 		    val budgetId = backStackEntry.arguments?.getString("budgetId")?.toLongOrNull()
 		    val expense = uiState.getExpenseByIdOrNew(expenseId, budgetId)
 
-		    ExpenseEditView(expense, { updateExpense -> viewModel.addExpense(updateExpense) })
+		    ExpenseEditView(expense, { updateExpense -> viewModel.addOrUpdateExpense(updateExpense) })
 		}
 
 		//other
