@@ -8,6 +8,7 @@ import kotlin.math.min
 import android.content.Context
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Card
@@ -28,7 +29,12 @@ import com.pineapple.budgetnotifier.database.entities.Budget
 import androidx.compose.foundation.lazy.items
 
 @Composable
-fun BudgetsView(budgets: List<Budget>, onNewClick: () -> Unit, onBudgetClick: (Long?) -> Unit) {
+fun BudgetsView(
+    budgets: List<Budget>,
+    onNewClick: () -> Unit,
+    onBudgetClick: (Long?) -> Unit,
+    onDelete: (Budget, Long?) -> Unit,
+) {
 
     Box(
 	modifier = Modifier
@@ -52,12 +58,23 @@ fun BudgetsView(budgets: List<Budget>, onNewClick: () -> Unit, onBudgetClick: (L
 			modifier = Modifier,
 			onClick = { onBudgetClick(budget.id) }
 		    ) {
-			Column {
-			    Text(budget.name)
-			    Text(budget.desc.substring(0, min(budget.desc.length, 10)))
-			    Text(budget.limit.toString())
-			    Text("-" + budget.spent.toString())
-			    Text(budget.startDate.toString() + " to " + budget.endDate.toString())
+			Row {
+
+			    IconButton(
+				modifier = Modifier,
+				onClick = { onDelete(budget, null) }
+			    ) {
+				Icon(painterResource(R.drawable.baseline_delete_24), "Delete Budget")
+			    }
+
+			    Column {
+				Text(budget.name)
+				Text(budget.desc.substring(0, min(budget.desc.length, 10)))
+				Text(budget.limit.toString())
+				Text("-" + budget.spent.toString())
+				Text(budget.startDate.toString() + " to " + budget.endDate.toString())
+			    }
+
 			}
 		    }
 		}

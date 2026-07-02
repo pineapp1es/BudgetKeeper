@@ -31,13 +31,14 @@ import androidx.compose.ui.res.painterResource
 @Composable
 fun BudgetInfoView(budget: Budget,
 		   expenses: List<Expense>,
-		   onBudgetEditClick: (Long?) -> Unit,
+		   onBudgetEdit: (Long?) -> Unit,
+		   onBudgetDelete: (Budget, Long?) -> Unit,
 		   onExpenseClick: (Long?, Long?) -> Unit,
 ) {
 
     Box {
 	Column {
-	    BudgetSection(budget, onBudgetEditClick)
+	    BudgetSection(budget, onBudgetEdit, onBudgetDelete)
 	    ExpensesSection(expenses, budget.id, onExpenseClick)
 	}
     }
@@ -45,14 +46,28 @@ fun BudgetInfoView(budget: Budget,
 }
 
 @Composable
-fun BudgetSection(budget: Budget, onBudgetEditClick: (Long?) -> Unit) {
+fun BudgetSection(budget: Budget, onBudgetEdit: (Long?) -> Unit, onBudgetDelete: (Budget, Long?) -> Unit) {
 
     Column(modifier = Modifier.offset(x = 80.dp, y = 20.dp)) {
-	IconButton(
-	    modifier = Modifier,
-	    onClick = { onBudgetEditClick(budget.id) }
+	Row(
+	    modifier = Modifier
+		.fillMaxWidth()
+		.padding(20.dp)
+	   ,
 	) {
-	    Icon(painterResource(R.drawable.baseline_edit_24), "Edit Budget")
+	    IconButton(
+		modifier = Modifier,
+		onClick = { onBudgetEdit(budget.id) }
+	    ) {
+		Icon(painterResource(R.drawable.baseline_edit_24), "Edit Budget")
+	    }
+
+	    IconButton(
+		modifier = Modifier,
+		onClick = { onBudgetDelete(budget, null) }
+	    ) {
+		Icon(painterResource(R.drawable.baseline_delete_24), "Delete Budget")
+	    }
 	}
 
 	Row(

@@ -48,4 +48,21 @@ class BudgetRepository(
 	}
 	expenseDao.insertOrReplaceExpenses(expense)
     }
+
+    suspend fun deleteExpense(expense: Expense) {
+	expenseDao.deleteExpenses(expense);
+    }
+
+    suspend fun deleteBudget(budget: Budget, moveExpensesTo: Long?) {
+	if (moveExpensesTo != null)
+	    expenseDao.moveExpensesToBudget(budget.id, moveExpensesTo)
+	else
+	    expenseDao.deleteExpensesByBudgetId(budget.id)
+
+	budgetDao.deleteBudgets(budget)
+    }
+
+    suspend fun moveExpenseTo(expenseId: Long, budgetId: Long) {
+	expenseDao.moveExpenseTo(expenseId, budgetId)
+    }
 }

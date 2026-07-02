@@ -18,6 +18,12 @@ interface ExpenseDao {
     @Delete
     suspend fun deleteExpenses(vararg expenses: Expense)
 
+    @Query("""
+	       DELETE FROM Expense
+	       WHERE budgetId = :budgetId
+	   """)
+    suspend fun deleteExpensesByBudgetId(budgetId: Long)
+
     @Query("SELECT * FROM expense")
     fun getAllExpenses(): Flow<List<Expense>>
 
@@ -29,9 +35,23 @@ interface ExpenseDao {
 
 
     @Query("""
-SELECT COALESCE(SUM(cost), 0)
-FROM expense
-WHERE budgetId = :budgetId
-	    """)
+	       SELECT COALESCE(SUM(cost), 0)
+	       FROM expense
+               WHERE budgetId = :budgetId
+	   """)
     suspend fun getTotalSpentByBudget(budgetId: Long): Double
+
+    @Query("""
+	       UPDATE Expense
+	       SET budgetId = :newBudgetId
+	       WHERE budgetId = :oldBudgetId
+	   """)
+    suspend fun moveExpensesToBudget(oldBudgetId: Long, newBudgetId: Long)
+
+    @Query("""
+	       UPDATE Expense
+	       SET budgetId = :budgetId
+	       WHERE id = :expenseId
+	   """)
+    suspend fun moveExpenseTo(expenseId: Long, budgetId: Long)
 }

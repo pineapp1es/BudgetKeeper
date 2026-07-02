@@ -6,8 +6,10 @@ import com.pineapple.budgetnotifier.database.BudgetNotifierDatabase
 
 import androidx.compose.runtime.Composable
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.foundation.text.input.rememberTextFieldState
@@ -31,7 +33,10 @@ import androidx.compose.foundation.verticalScroll
 
 
 @Composable
-fun BudgetEditView(budget: Budget, onSave: (Budget) -> Unit) {
+fun BudgetEditView(budget: Budget,
+		   onSave: (Budget) -> Unit,
+		   onDelete: (Budget, Long?) -> Unit,
+) {
 
     // create states for text fields
     val nameTextState = rememberTextFieldState(budget.name)
@@ -51,25 +56,41 @@ fun BudgetEditView(budget: Budget, onSave: (Budget) -> Unit) {
 	    modifier = Modifier
 		.padding(20.dp),
 	){
-
-	    IconButton(
-		modifier = Modifier,
-		onClick = {
-		    val editedBudget = Budget(
-			id = budget.id,
-			name = nameTextState.text.toString(),
-			desc = descTextState.text.toString(),
-			limit = limitTextState.text.toString().toDouble(),
-			spent = spentTextState.text.toString().toDouble(),
-			startDate = Date.from(dateRangeState.getSelectedStartDate()!!.atStartOfDay(ZoneId.systemDefault()).toInstant()),
-			endDate = Date.from(dateRangeState.getSelectedEndDate()!!.atStartOfDay(ZoneId.systemDefault()).toInstant()),
-		    )
-
-		    onSave(editedBudget)
-		},
+	    Row (
+		modifier = Modifier
+		    .fillMaxWidth()
+		    .padding(20.dp)
+		,
 	    ) {
-		Icon(painterResource(R.drawable.baseline_save_24), "Save Budget")
+
+		IconButton(
+		    modifier = Modifier,
+		    onClick = {
+			val editedBudget = Budget(
+			    id = budget.id,
+			    name = nameTextState.text.toString(),
+			    desc = descTextState.text.toString(),
+			    limit = limitTextState.text.toString().toDouble(),
+			    spent = spentTextState.text.toString().toDouble(),
+			    startDate = Date.from(dateRangeState.getSelectedStartDate()!!.atStartOfDay(ZoneId.systemDefault()).toInstant()),
+			    endDate = Date.from(dateRangeState.getSelectedEndDate()!!.atStartOfDay(ZoneId.systemDefault()).toInstant()),
+			)
+
+			onSave(editedBudget)
+		    },
+		) {
+		    Icon(painterResource(R.drawable.baseline_save_24), "Save Budget")
+		}
+
+		IconButton(
+		    modifier = Modifier,
+		    onClick = { onDelete(budget, null) }
+		) {
+		    Icon(painterResource(R.drawable.baseline_delete_24), "Delete Budget")
+		}
+
 	    }
+
 
 	    Column {
 

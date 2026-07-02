@@ -7,8 +7,10 @@ import com.pineapple.budgetnotifier.database.BudgetNotifierDatabase
 
 import androidx.compose.runtime.Composable
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.IconButton
@@ -35,7 +37,11 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ExpenseEditView(expense: Expense, onSave: (Expense) -> Unit) {
+fun ExpenseEditView(
+    expense: Expense,
+    onSave: (Expense) -> Unit,
+    onDelete: (Expense) -> Unit,
+) {
 
     // create states for text fields
     val budgetIdTextState = rememberTextFieldState(expense.budgetId.toString())
@@ -57,25 +63,38 @@ fun ExpenseEditView(expense: Expense, onSave: (Expense) -> Unit) {
 		.padding(20.dp),
 	){
 
-	    IconButton(
-		modifier = Modifier,
-		onClick = {
-		    val newDate = Date.from(dateState.getSelectedDate()!!.atStartOfDay(ZoneId.systemDefault()).toInstant())
-		    newDate.setHours(timeState.hour)
-		    newDate.setMinutes(timeState.minute)
-		    val editedExpense = Expense(
-			id = expense.id,
-			budgetId = budgetIdTextState.text.toString().toLong(),
-			name = nameTextState.text.toString(),
-			reason = reasonTextState.text.toString(),
-			cost = costTextState.text.toString().toDouble(),
-			date = newDate,
-		    )
-
-		    onSave(editedExpense)
-		},
+	    Row(
+		modifier = Modifier
+		    .fillMaxWidth()
+		    .padding(20.dp)
+	       ,
 	    ) {
-		Icon(painterResource(R.drawable.baseline_save_24), "Save Expense")
+		IconButton(
+		    modifier = Modifier,
+		    onClick = {
+			val newDate = Date.from(dateState.getSelectedDate()!!.atStartOfDay(ZoneId.systemDefault()).toInstant())
+			newDate.setHours(timeState.hour)
+			newDate.setMinutes(timeState.minute)
+			val editedExpense = Expense(
+			    id = expense.id,
+			    budgetId = budgetIdTextState.text.toString().toLong(),
+			    name = nameTextState.text.toString(),
+			    reason = reasonTextState.text.toString(),
+			    cost = costTextState.text.toString().toDouble(),
+			    date = newDate,
+			)
+
+			onSave(editedExpense)
+		    },
+		) {
+		    Icon(painterResource(R.drawable.baseline_save_24), "Save Expense")
+		}
+
+		IconButton(
+		    onClick = { onDelete(expense) },
+		) {
+		    Icon(painterResource(R.drawable.baseline_delete_24), "Delete Expense")
+		}
 	    }
 
 	    Column (
