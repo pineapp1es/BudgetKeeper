@@ -113,6 +113,7 @@ fun MainScreen(
 
 		    ExpenseEditView(
 			expense,
+			uiState.budgets,
 			onSave = { updateExpense -> viewModel.addOrUpdateExpense(updateExpense) },
 			onDelete = { expense -> viewModel.deleteExpense(expense) },
 		    )
@@ -125,6 +126,7 @@ fun MainScreen(
 
 		    ExpenseEditView(
 			expense,
+			uiState.budgets,
 			onSave = { updateExpense -> viewModel.addOrUpdateExpense(updateExpense) },
 			onDelete = { expense -> viewModel.deleteExpense(expense) },
 		    )

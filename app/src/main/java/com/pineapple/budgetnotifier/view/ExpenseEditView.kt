@@ -7,7 +7,7 @@ import com.pineapple.budgetnotifier.database.BudgetNotifierDatabase
 
 import androidx.compose.runtime.Composable
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -34,17 +34,28 @@ import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.mutableStateOf
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ExpenseEditView(
     expense: Expense,
+    budgets: List<Budget>,
     onSave: (Expense) -> Unit,
     onDelete: (Expense) -> Unit,
 ) {
 
+
+
+    var selectedBudget: Budget by remember { mutableStateOf(budgets.find { it.id == expense.budgetId } ?: budgets.get(0)) }
+    var budgetIdMenuExpanded by remember { mutableStateOf(false) }
+
     // create states for text fields
-    val budgetIdTextState = rememberTextFieldState(expense.budgetId.toString())
     val nameTextState = rememberTextFieldState(expense.name)
     val reasonTextState = rememberTextFieldState(expense.reason)
     val costTextState = rememberTextFieldState(expense.cost.toString())
@@ -77,7 +88,7 @@ fun ExpenseEditView(
 			newDate.setMinutes(timeState.minute)
 			val editedExpense = Expense(
 			    id = expense.id,
-			    budgetId = budgetIdTextState.text.toString().toLong(),
+			    budgetId = selectedBudget.id,
 			    name = nameTextState.text.toString(),
 			    reason = reasonTextState.text.toString(),
 			    cost = costTextState.text.toString().toDouble(),
@@ -102,11 +113,30 @@ fun ExpenseEditView(
 		    .verticalScroll(rememberScrollState()),
 	    ){
 
-		// budgetid text field
-		TextField(
-		    state = budgetIdTextState,
-		    label = { Text("budgetId") },
-		)
+		Row {
+		    Text(
+			selectedBudget.name,
+		    )
+		    IconButton(
+			onClick = { budgetIdMenuExpanded = true },
+		    ) {
+			Icon(painterResource(R.drawable.baseline_arrow_drop_down_24), "Expand Budget Menu")
+		    }
+
+		}
+
+		DropdownMenu(
+		    expanded = budgetIdMenuExpanded,
+		    onDismissRequest = { budgetIdMenuExpanded = false },
+		) {
+
+		    budgets.forEach { budget ->
+			DropdownMenuItem(
+			    text = { Text(budget.name) },
+			    onClick = { selectedBudget = budget; budgetIdMenuExpanded = false },
+			)
+		    }
+		}
 
 		// name text field
 		TextField(
@@ -128,7 +158,6 @@ fun ExpenseEditView(
 
 		DatePicker(
 		    modifier = Modifier
-			// .verticalScroll(rememberScrollState())
 			  ,
 		    state = dateState,
 		)
