@@ -4,6 +4,7 @@ import com.pineapple.budgetnotifier.database.entities.Expense
 import com.pineapple.budgetnotifier.database.entities.Budget
 import com.pineapple.budgetnotifier.R
 import com.pineapple.budgetnotifier.database.BudgetNotifierDatabase
+import com.pineapple.budgetnotifier.components.Toast
 
 import androidx.compose.runtime.Composable
 import androidx.compose.foundation.layout.Column
@@ -50,9 +51,12 @@ fun ExpenseEditView(
     onDelete: (Expense) -> Unit,
 ) {
 
-
-
-    var selectedBudget: Budget by remember { mutableStateOf(budgets.find { it.id == expense.budgetId } ?: budgets.get(0)) }
+    var selectedBudget: Budget by remember {
+	mutableStateOf(
+	    budgets.find { it.id == expense.budgetId }
+		?: budgets.get(0)
+	)
+    }
     var budgetIdMenuExpanded by remember { mutableStateOf(false) }
 
     // create states for text fields
@@ -83,6 +87,8 @@ fun ExpenseEditView(
 		IconButton(
 		    modifier = Modifier,
 		    onClick = {
+
+
 			val newDate = Date.from(dateState.getSelectedDate()!!.atStartOfDay(ZoneId.systemDefault()).toInstant())
 			newDate.setHours(timeState.hour)
 			newDate.setMinutes(timeState.minute)

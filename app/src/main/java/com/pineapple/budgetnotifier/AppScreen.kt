@@ -103,10 +103,13 @@ fun MainScreen(
 				     navController.navigate(Views.EXPENSEEDIT.name + "/${expenseId}")
 				 },
 				 onDelete = { expense -> viewModel.deleteExpense(expense) },
+				 canCreateNew = uiState.budgets.size > 0,
 		    )
 		}
 
 		composable(route = Views.EXPENSEEDIT.name + "/{expenseId}") { backStackEntry ->
+
+		    if (uiState.budgets.size == 0) return
 
 		    val expenseId = backStackEntry.arguments?.getString("expenseId")?.toLongOrNull()
 		    val expense = uiState.getExpenseByIdOrNew(expenseId, null)
@@ -119,6 +122,8 @@ fun MainScreen(
 		    )
 		}
 		composable(route = Views.EXPENSEEDIT.name + "/{expenseId}/{budgetId}") { backStackEntry ->
+
+		    if (uiState.budgets.size == 0) return
 
 		    val expenseId = backStackEntry.arguments?.getString("expenseId")?.toLongOrNull()
 		    val budgetId = backStackEntry.arguments?.getString("budgetId")?.toLongOrNull()

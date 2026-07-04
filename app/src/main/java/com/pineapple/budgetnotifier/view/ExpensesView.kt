@@ -2,11 +2,17 @@ package com.pineapple.budgetnotifier.view
 
 import com.pineapple.budgetnotifier.R
 import com.pineapple.budgetnotifier.database.entities.Expense
+import com.pineapple.budgetnotifier.components.Toast
 
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.Composable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.res.painterResource
 import androidx.compose.material3.Card
 import androidx.compose.material3.Text
@@ -22,13 +28,31 @@ fun ExpensesView(
     expenses: List<Expense>,
     onExpenseClick: (Long?) -> Unit,
     onDelete: (Expense) -> Unit,
+    canCreateNew: Boolean,
 ) {
+    var showToast by remember { mutableStateOf(false) }
+
+    if (showToast) {
+	Toast(
+	    title = {},
+	    content = { Text("No budgets") },
+	    onDismiss = { showToast = false },
+	    xoffset = 20.dp,
+	    yoffset = 20.dp,
+	)
+    }
+
     Box {
 	Column {
 
 	    IconButton(
 		modifier = Modifier,
-		onClick = { onExpenseClick(null) }
+		onClick = {
+		    if (canCreateNew)
+			onExpenseClick(null)
+		    else
+			showToast = true
+		}
 	    ) {
 		Icon(painterResource(R.drawable.baseline_add_24), "New budget")
 	    }

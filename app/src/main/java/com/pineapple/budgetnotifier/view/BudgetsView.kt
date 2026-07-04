@@ -2,6 +2,7 @@ package com.pineapple.budgetnotifier.view
 
 import com.pineapple.budgetnotifier.R
 import com.pineapple.budgetnotifier.Views
+import com.pineapple.budgetnotifier.components.Toast
 
 import kotlin.math.min
 
