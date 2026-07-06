@@ -1,8 +1,6 @@
-#+title: BudgetNotifier
+#+title: BudgetKeeper
 
 Android app for budget tracking and management
-
-very WIP
 
 * Features
 - Create budgets

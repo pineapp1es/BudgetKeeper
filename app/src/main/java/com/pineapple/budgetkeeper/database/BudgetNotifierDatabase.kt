@@ -1,12 +1,12 @@
-package com.pineapple.budgetnotifier.database
+package com.pineapple.budgetkeeper.database
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
-import com.pineapple.budgetnotifier.database.access.BudgetDao
-import com.pineapple.budgetnotifier.database.access.ExpenseDao
-import com.pineapple.budgetnotifier.database.entities.Budget
-import com.pineapple.budgetnotifier.database.entities.Expense
-import com.pineapple.budgetnotifier.database.Converters
+import com.pineapple.budgetkeeper.database.access.BudgetDao
+import com.pineapple.budgetkeeper.database.access.ExpenseDao
+import com.pineapple.budgetkeeper.database.entities.Budget
+import com.pineapple.budgetkeeper.database.entities.Expense
+import com.pineapple.budgetkeeper.database.Converters
 import android.content.Context
 import androidx.room.Room
 import androidx.room.TypeConverters

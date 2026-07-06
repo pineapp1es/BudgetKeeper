@@ -1,8 +1,8 @@
-package com.pineapple.budgetnotifier.database
+package com.pineapple.budgetkeeper.database
 
-import com.pineapple.budgetnotifier.database.BudgetNotifierDatabase
-import com.pineapple.budgetnotifier.database.entities.Budget
-import com.pineapple.budgetnotifier.database.entities.Expense
+import com.pineapple.budgetkeeper.database.BudgetNotifierDatabase
+import com.pineapple.budgetkeeper.database.entities.Budget
+import com.pineapple.budgetkeeper.database.entities.Expense
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first

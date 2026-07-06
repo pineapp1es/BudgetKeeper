@@ -1,4 +1,4 @@
-package com.pineapple.budgetnotifier.style
+package com.pineapple.budgetkeeper.style
 
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable

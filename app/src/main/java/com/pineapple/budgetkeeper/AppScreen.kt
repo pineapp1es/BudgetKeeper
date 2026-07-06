@@ -1,8 +1,8 @@
-package com.pineapple.budgetnotifier
+package com.pineapple.budgetkeeper
 
-import com.pineapple.budgetnotifier.database.entities.Budget
-import com.pineapple.budgetnotifier.database.entities.Expense
-import com.pineapple.budgetnotifier.view.*
+import com.pineapple.budgetkeeper.database.entities.Budget
+import com.pineapple.budgetkeeper.database.entities.Expense
+import com.pineapple.budgetkeeper.view.*
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -109,32 +109,36 @@ fun MainScreen(
 
 		composable(route = Views.EXPENSEEDIT.name + "/{expenseId}") { backStackEntry ->
 
-		    if (uiState.budgets.size == 0) return
+		    if (uiState.budgets.size != 0) {
+			val expenseId = backStackEntry.arguments?.getString("expenseId")?.toLongOrNull()
+			val expense = uiState.getExpenseByIdOrNew(expenseId, null)
 
-		    val expenseId = backStackEntry.arguments?.getString("expenseId")?.toLongOrNull()
-		    val expense = uiState.getExpenseByIdOrNew(expenseId, null)
+			ExpenseEditView(
+			    expense,
+			    uiState.budgets,
+			    onSave = { updateExpense -> viewModel.addOrUpdateExpense(updateExpense) },
+			    onDelete = { expense -> viewModel.deleteExpense(expense) },
+			)
+		    }
+		    else navController.navigate(Views.BUDGETLIST.name)
 
-		    ExpenseEditView(
-			expense,
-			uiState.budgets,
-			onSave = { updateExpense -> viewModel.addOrUpdateExpense(updateExpense) },
-			onDelete = { expense -> viewModel.deleteExpense(expense) },
-		    )
 		}
 		composable(route = Views.EXPENSEEDIT.name + "/{expenseId}/{budgetId}") { backStackEntry ->
 
-		    if (uiState.budgets.size == 0) return
+		    if (uiState.budgets.size != 0) {
+			val expenseId = backStackEntry.arguments?.getString("expenseId")?.toLongOrNull()
+			val budgetId = backStackEntry.arguments?.getString("budgetId")?.toLongOrNull()
+			val expense = uiState.getExpenseByIdOrNew(expenseId, budgetId)
 
-		    val expenseId = backStackEntry.arguments?.getString("expenseId")?.toLongOrNull()
-		    val budgetId = backStackEntry.arguments?.getString("budgetId")?.toLongOrNull()
-		    val expense = uiState.getExpenseByIdOrNew(expenseId, budgetId)
+			ExpenseEditView(
+			    expense,
+			    uiState.budgets,
+			    onSave = { updateExpense -> viewModel.addOrUpdateExpense(updateExpense) },
+			    onDelete = { expense -> viewModel.deleteExpense(expense) },
+			)
+		    }
+		    else navController.navigate(Views.BUDGETLIST.name)
 
-		    ExpenseEditView(
-			expense,
-			uiState.budgets,
-			onSave = { updateExpense -> viewModel.addOrUpdateExpense(updateExpense) },
-			onDelete = { expense -> viewModel.deleteExpense(expense) },
-		    )
 		}
 
 		//other

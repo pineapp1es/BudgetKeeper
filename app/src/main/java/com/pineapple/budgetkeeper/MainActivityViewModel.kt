@@ -1,11 +1,11 @@
-package com.pineapple.budgetnotifier
+package com.pineapple.budgetkeeper
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.pineapple.budgetnotifier.database.BudgetRepository
-import com.pineapple.budgetnotifier.database.entities.Budget
-import com.pineapple.budgetnotifier.database.entities.Expense
+import com.pineapple.budgetkeeper.database.BudgetRepository
+import com.pineapple.budgetkeeper.database.entities.Budget
+import com.pineapple.budgetkeeper.database.entities.Expense
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine

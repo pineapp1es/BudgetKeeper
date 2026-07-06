@@ -1,8 +1,8 @@
-package com.pineapple.budgetnotifier.view
+package com.pineapple.budgetkeeper.view
 
-import com.pineapple.budgetnotifier.database.entities.Budget
-import com.pineapple.budgetnotifier.R
-import com.pineapple.budgetnotifier.database.BudgetNotifierDatabase
+import com.pineapple.budgetkeeper.database.entities.Budget
+import com.pineapple.budgetkeeper.R
+import com.pineapple.budgetkeeper.database.BudgetNotifierDatabase
 
 import androidx.compose.runtime.Composable
 import androidx.compose.foundation.layout.Column

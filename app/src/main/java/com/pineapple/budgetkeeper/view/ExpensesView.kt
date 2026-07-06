@@ -1,8 +1,8 @@
-package com.pineapple.budgetnotifier.view
+package com.pineapple.budgetkeeper.view
 
-import com.pineapple.budgetnotifier.R
-import com.pineapple.budgetnotifier.database.entities.Expense
-import com.pineapple.budgetnotifier.components.Toast
+import com.pineapple.budgetkeeper.R
+import com.pineapple.budgetkeeper.database.entities.Expense
+import com.pineapple.budgetkeeper.components.Toast
 
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember

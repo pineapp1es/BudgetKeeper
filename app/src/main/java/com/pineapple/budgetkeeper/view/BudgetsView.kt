@@ -1,8 +1,8 @@
-package com.pineapple.budgetnotifier.view
+package com.pineapple.budgetkeeper.view
 
-import com.pineapple.budgetnotifier.R
-import com.pineapple.budgetnotifier.Views
-import com.pineapple.budgetnotifier.components.Toast
+import com.pineapple.budgetkeeper.R
+import com.pineapple.budgetkeeper.Views
+import com.pineapple.budgetkeeper.components.Toast
 
 import kotlin.math.min
 
@@ -26,7 +26,7 @@ import androidx.navigation.NavHostController
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.mutableStateOf
-import com.pineapple.budgetnotifier.database.entities.Budget
+import com.pineapple.budgetkeeper.database.entities.Budget
 import androidx.compose.foundation.lazy.items
 
 @Composable

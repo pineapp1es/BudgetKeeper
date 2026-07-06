@@ -1,9 +1,9 @@
-package com.pineapple.budgetnotifier.database.entities
+package com.pineapple.budgetkeeper.database.entities
 
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
-import com.pineapple.budgetnotifier.utils.getRandomString
+import com.pineapple.budgetkeeper.utils.getRandomString
 import java.util.Date
 import kotlin.arrayOf
 

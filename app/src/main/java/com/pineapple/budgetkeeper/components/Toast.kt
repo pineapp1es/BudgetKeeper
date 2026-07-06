@@ -1,6 +1,6 @@
-package com.pineapple.budgetnotifier.components
+package com.pineapple.budgetkeeper.components
 
-import com.pineapple.budgetnotifier.R
+import com.pineapple.budgetkeeper.R
 
 import androidx.compose.runtime.Composable
 import androidx.compose.foundation.layout.fillMaxSize

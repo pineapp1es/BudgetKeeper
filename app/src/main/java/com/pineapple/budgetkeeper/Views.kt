@@ -1,4 +1,4 @@
-package com.pineapple.budgetnotifier
+package com.pineapple.budgetkeeper
 
 enum class Views {
     SETTINGS,

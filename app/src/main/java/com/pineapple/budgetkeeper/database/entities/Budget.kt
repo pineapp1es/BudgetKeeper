@@ -1,6 +1,6 @@
-package com.pineapple.budgetnotifier.database.entities
+package com.pineapple.budgetkeeper.database.entities
 
-import com.pineapple.budgetnotifier.utils.getRandomString
+import com.pineapple.budgetkeeper.utils.getRandomString
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

@@ -7,7 +7,7 @@
         errorLine1="    val startDate: LocalDate = budget.startDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate(); "
         errorLine2="                                                            ~~~~~~">
         <location
-            file="src/main/java/com/pineapple/budgetnotifier/view/BudgetEditView.kt"
+            file="src/main/java/com/pineapple/budgetkeeper/view/BudgetEditView.kt"
             line="37"
             column="61"/>
     </issue>
@@ -18,7 +18,7 @@
         errorLine1="    val startDate: LocalDate = budget.startDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate(); "
         errorLine2="                                                                          ~~~~~~~~~~~~~">
         <location
-            file="src/main/java/com/pineapple/budgetnotifier/view/BudgetEditView.kt"
+            file="src/main/java/com/pineapple/budgetkeeper/view/BudgetEditView.kt"
             line="37"
             column="75"/>
     </issue>
@@ -29,7 +29,7 @@
         errorLine1="    val startDate: LocalDate = budget.startDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate(); "
         errorLine2="                                                                                           ~~~~~~~~~~~">
         <location
-            file="src/main/java/com/pineapple/budgetnotifier/view/BudgetEditView.kt"
+            file="src/main/java/com/pineapple/budgetkeeper/view/BudgetEditView.kt"
             line="37"
             column="92"/>
     </issue>
@@ -40,7 +40,7 @@
         errorLine1="    val startDate: LocalDate = budget.startDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate(); "
         errorLine2="                                                ~~~~~~~~~">
         <location
-            file="src/main/java/com/pineapple/budgetnotifier/view/BudgetEditView.kt"
+            file="src/main/java/com/pineapple/budgetkeeper/view/BudgetEditView.kt"
             line="37"
             column="49"/>
     </issue>
@@ -51,7 +51,7 @@
         errorLine1="    val endDate: LocalDate = budget.endDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate(); "
         errorLine2="                                                        ~~~~~~">
         <location
-            file="src/main/java/com/pineapple/budgetnotifier/view/BudgetEditView.kt"
+            file="src/main/java/com/pineapple/budgetkeeper/view/BudgetEditView.kt"
             line="38"
             column="57"/>
     </issue>
@@ -62,7 +62,7 @@
         errorLine1="    val endDate: LocalDate = budget.endDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate(); "
         errorLine2="                                                                      ~~~~~~~~~~~~~">
         <location
-            file="src/main/java/com/pineapple/budgetnotifier/view/BudgetEditView.kt"
+            file="src/main/java/com/pineapple/budgetkeeper/view/BudgetEditView.kt"
             line="38"
             column="71"/>
     </issue>
@@ -73,7 +73,7 @@
         errorLine1="    val endDate: LocalDate = budget.endDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate(); "
         errorLine2="                                                                                       ~~~~~~~~~~~">
         <location
-            file="src/main/java/com/pineapple/budgetnotifier/view/BudgetEditView.kt"
+            file="src/main/java/com/pineapple/budgetkeeper/view/BudgetEditView.kt"
             line="38"
             column="88"/>
     </issue>
@@ -84,7 +84,7 @@
         errorLine1="    val endDate: LocalDate = budget.endDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate(); "
         errorLine2="                                            ~~~~~~~~~">
         <location
-            file="src/main/java/com/pineapple/budgetnotifier/view/BudgetEditView.kt"
+            file="src/main/java/com/pineapple/budgetkeeper/view/BudgetEditView.kt"
             line="38"
             column="45"/>
     </issue>
@@ -95,7 +95,7 @@
         errorLine1="    val dateRangeState = rememberDateRangePickerState(startDate, endDate);"
         errorLine2="                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/main/java/com/pineapple/budgetnotifier/view/BudgetEditView.kt"
+            file="src/main/java/com/pineapple/budgetkeeper/view/BudgetEditView.kt"
             line="39"
             column="26"/>
     </issue>
@@ -117,11 +117,11 @@
         errorLine1=" Text(currentRoute ?: &quot;idk&quot;)"
         errorLine2="~">
         <location
-            file="src/main/java/com/pineapple/budgetnotifier/AppScreen.kt"
+            file="src/main/java/com/pineapple/budgetkeeper/AppScreen.kt"
             line="133"
             column="1"/>
         <location
-            file="src/main/java/com/pineapple/budgetnotifier/AppScreen.kt"
+            file="src/main/java/com/pineapple/budgetkeeper/AppScreen.kt"
             line="124"
             column="1"
             message="Previous line indentation here"/>

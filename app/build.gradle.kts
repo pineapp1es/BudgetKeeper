@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = "com.pineapple.budgetnotifier"
+    namespace = "com.pineapple.budgetkeeper"
     compileSdk {
         version = release(36) {
             minorApiLevel = 1
@@ -13,7 +13,7 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.pineapple.budgetnotifier"
+        applicationId = "com.pineapple.budgetkeeper"
         minSdk = 26
         targetSdk = 36
         versionCode = 1

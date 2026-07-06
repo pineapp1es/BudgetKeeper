@@ -1,4 +1,4 @@
-package com.pineapple.budgetnotifier.utils
+package com.pineapple.budgetkeeper.utils
 
 fun getRandomString(length: Int) : String {
     val allowedChars = ('A'..'Z') + ('a'..'z') + ('0'..'9')

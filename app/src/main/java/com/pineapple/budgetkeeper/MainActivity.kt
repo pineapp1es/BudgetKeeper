@@ -1,4 +1,4 @@
-package com.pineapple.budgetnotifier
+package com.pineapple.budgetkeeper
 
 import android.os.Build
 import android.os.Bundle
@@ -11,11 +11,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 
-import com.pineapple.budgetnotifier.MainScreen
-import com.pineapple.budgetnotifier.Views
-import com.pineapple.budgetnotifier.database.BudgetNotifierDatabase
-import com.pineapple.budgetnotifier.database.BudgetRepository
-import com.pineapple.budgetnotifier.style.BudgetNotifierTheme
+import com.pineapple.budgetkeeper.MainScreen
+import com.pineapple.budgetkeeper.Views
+import com.pineapple.budgetkeeper.database.BudgetNotifierDatabase
+import com.pineapple.budgetkeeper.database.BudgetRepository
+import com.pineapple.budgetkeeper.style.BudgetNotifierTheme
 
 class MainActivity : ComponentActivity() {
 

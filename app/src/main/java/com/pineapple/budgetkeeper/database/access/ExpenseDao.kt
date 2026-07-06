@@ -1,7 +1,7 @@
-package com.pineapple.budgetnotifier.database.access
+package com.pineapple.budgetkeeper.database.access
 
 import androidx.room.*
-import com.pineapple.budgetnotifier.database.entities.Expense
+import com.pineapple.budgetkeeper.database.entities.Expense
 import kotlinx.coroutines.flow.Flow
 
 @Dao

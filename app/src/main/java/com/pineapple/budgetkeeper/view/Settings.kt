@@ -1,4 +1,4 @@
-package com.pineapple.budgetnotifier.view
+package com.pineapple.budgetkeeper.view
 
 import androidx.compose.runtime.Composable
 

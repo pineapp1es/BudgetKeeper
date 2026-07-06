@@ -1,4 +1,4 @@
-package com.pineapple.budgetnotifier.database
+package com.pineapple.budgetkeeper.database
 
 import androidx.room.TypeConverter
 import java.util.Date
