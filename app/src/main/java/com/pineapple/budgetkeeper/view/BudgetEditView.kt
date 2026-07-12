@@ -21,6 +21,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import java.util.Date
 import java.time.LocalDate
+import java.util.Calendar
 import java.time.ZoneId
 import kotlinx.coroutines.launch
 import androidx.compose.material3.DateRangePicker
@@ -36,6 +37,7 @@ import androidx.compose.foundation.verticalScroll
 fun BudgetEditView(budget: Budget,
 		   onSave: (Budget) -> Unit,
 		   onDelete: (Budget, Long?) -> Unit,
+		   isNew: Boolean = false,
 ) {
 
     // create states for text fields
@@ -66,14 +68,20 @@ fun BudgetEditView(budget: Budget,
 		IconButton(
 		    modifier = Modifier,
 		    onClick = {
+			val startCal = Calendar.getInstance()
+			startCal.setTime(Date.from(dateRangeState.getSelectedStartDate()!!.atStartOfDay(ZoneId.systemDefault()).toInstant()))
+
+			val endCal = Calendar.getInstance()
+			endCal.setTime(Date.from(dateRangeState.getSelectedEndDate()!!.atStartOfDay(ZoneId.systemDefault()).toInstant()))
+
 			val editedBudget = Budget(
 			    id = budget.id,
 			    name = nameTextState.text.toString(),
 			    desc = descTextState.text.toString(),
 			    limit = limitTextState.text.toString().toDouble(),
 			    spent = spentTextState.text.toString().toDouble(),
-			    startDate = Date.from(dateRangeState.getSelectedStartDate()!!.atStartOfDay(ZoneId.systemDefault()).toInstant()),
-			    endDate = Date.from(dateRangeState.getSelectedEndDate()!!.atStartOfDay(ZoneId.systemDefault()).toInstant()),
+			    startDate = startCal,
+			    endDate = endCal,
 			)
 
 			onSave(editedBudget)
@@ -82,11 +90,13 @@ fun BudgetEditView(budget: Budget,
 		    Icon(painterResource(R.drawable.baseline_save_24), "Save Budget")
 		}
 
-		IconButton(
-		    modifier = Modifier,
-		    onClick = { onDelete(budget, null) }
-		) {
-		    Icon(painterResource(R.drawable.baseline_delete_24), "Delete Budget")
+		if (!isNew) {
+		    IconButton(
+			modifier = Modifier,
+			onClick = { onDelete(budget, null) }
+		    ) {
+			Icon(painterResource(R.drawable.baseline_delete_24), "Delete Budget")
+		    }
 		}
 
 	    }

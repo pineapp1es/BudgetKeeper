@@ -22,6 +22,7 @@ import androidx.compose.ui.draw.scale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import java.util.Date
+import java.util.Calendar
 import java.time.LocalDate
 import java.time.ZoneId
 import androidx.compose.foundation.text.input.rememberTextFieldState
@@ -49,6 +50,7 @@ fun ExpenseEditView(
     budgets: List<Budget>,
     onSave: (Expense) -> Unit,
     onDelete: (Expense) -> Unit,
+    isNew: Boolean = false,
 ) {
 
     var selectedBudget: Budget by remember {
@@ -65,8 +67,8 @@ fun ExpenseEditView(
     val costTextState = rememberTextFieldState(expense.cost.toString())
     val date: LocalDate = expense.date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate()
     val dateState = rememberDatePickerState(date)
-    val timeH: Int = expense.date.getHours()
-    val timeM: Int = expense.date.getMinutes()
+    val timeH: Int = expense.date.get(Calendar.HOUR_OF_DAY)
+    val timeM: Int = expense.date.get(Calendar.MINUTE)
     val timeState = rememberTimePickerState(timeH, timeM)
 
     Box(
@@ -89,9 +91,10 @@ fun ExpenseEditView(
 		    onClick = {
 
 
-			val newDate = Date.from(dateState.getSelectedDate()!!.atStartOfDay(ZoneId.systemDefault()).toInstant())
-			newDate.setHours(timeState.hour)
-			newDate.setMinutes(timeState.minute)
+			val newDate = Calendar.getInstance()
+			newDate.setTime(Date.from(dateState.getSelectedDate()!!.atStartOfDay(ZoneId.systemDefault()).toInstant()))
+			newDate.set(Calendar.HOUR_OF_DAY, timeState.hour)
+			newDate.set(Calendar.MINUTE, timeState.minute)
 			val editedExpense = Expense(
 			    id = expense.id,
 			    budgetId = selectedBudget.id,
@@ -107,10 +110,12 @@ fun ExpenseEditView(
 		    Icon(painterResource(R.drawable.baseline_save_24), "Save Expense")
 		}
 
-		IconButton(
-		    onClick = { onDelete(expense) },
-		) {
-		    Icon(painterResource(R.drawable.baseline_delete_24), "Delete Expense")
+		if (!isNew) {
+		    IconButton(
+			onClick = { onDelete(expense) },
+		    ) {
+			Icon(painterResource(R.drawable.baseline_delete_24), "Delete Expense")
+		    }
 		}
 	    }
 

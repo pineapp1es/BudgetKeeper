@@ -4,7 +4,7 @@ import com.pineapple.budgetkeeper.utils.getRandomString
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import java.util.Date
+import java.util.Calendar
 
 @Entity
 data class Budget(
@@ -14,8 +14,8 @@ data class Budget(
     val desc: String,
     val limit: Double,
     val spent: Double,
-    val startDate: Date,
-    val endDate: Date,
+    val startDate: Calendar,
+    val endDate: Calendar,
 
 ) {
     constructor(budget: Budget, spent: Double):
@@ -38,8 +38,8 @@ data class Budget(
 		desc= "",
 		limit= 0.0,
 		spent= 0.0,
-		startDate= Date(),
-		endDate= Date(),
+		startDate= Calendar.getInstance(),
+		endDate= Calendar.getInstance(),
 	    )
 	}
     }

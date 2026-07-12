@@ -3,6 +3,7 @@ package com.pineapple.budgetkeeper.view
 import com.pineapple.budgetkeeper.R
 import com.pineapple.budgetkeeper.database.entities.Budget
 import com.pineapple.budgetkeeper.database.entities.Expense
+import com.pineapple.budgetkeeper.components.ExpenseList
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -92,24 +93,11 @@ fun BudgetSection(budget: Budget, onBudgetEdit: (Long?) -> Unit, onBudgetDelete:
 
 
 @Composable
-fun ExpensesSection(expenses: List<Expense>, budgetId: Long, onExpenseClick: (Long?, Long?) -> Unit) {
-    Column {
-	IconButton(
-	    modifier = Modifier,
-	    onClick = { onExpenseClick(null, budgetId) }
-	) {
-	    Icon(painterResource(R.drawable.baseline_add_24), "New Expense")
-	}
-	
-	LazyColumn {
-	    items(expenses) { expense ->
-		Card(
-		    modifier = Modifier,
-		    onClick = { onExpenseClick(expense.id, budgetId) }
-		) {
-		    Text(expense.name)
-		}
-	    }
-	}
-    }
+fun ExpensesSection(expenses: List<Expense>,
+		    budgetId: Long,
+		    onExpenseClick: (Long?, Long?) -> Unit) {
+//     ExpenseList(
+// 	expenses,
+// 	onExpenseClick,
+//     )
 }

@@ -89,7 +89,7 @@ class MainActivityViewModelFactory(
 
 data class MainActivityUiState (
     val isLoading: Boolean = true,
-    val budgets: List<Budget> = listOf() ,
+    val budgets: List<Budget> = listOf(),
     val expenses: List<Expense> = listOf(),
 ) {
     fun getBudgetByIdOrNew(budgetId: Long?): Budget {

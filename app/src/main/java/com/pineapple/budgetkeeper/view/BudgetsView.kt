@@ -5,6 +5,7 @@ import com.pineapple.budgetkeeper.Views
 import com.pineapple.budgetkeeper.components.Toast
 
 import kotlin.math.min
+import java.util.Calendar
 
 import android.content.Context
 import androidx.compose.foundation.layout.Box
@@ -37,6 +38,8 @@ fun BudgetsView(
     onDelete: (Budget, Long?) -> Unit,
 ) {
 
+    // val activeBudgets = budgets.filter { it.endDate > Date() }
+
     Box(
 	modifier = Modifier
 	    .padding(30.dp),
@@ -55,6 +58,16 @@ fun BudgetsView(
 	    ) {
 
 		items(budgets) { budget ->
+
+		    var startDateString = "" +
+			budget.startDate.get(Calendar.DATE).toString().padStart(2, '0') + "-" +
+			(budget.startDate.get(Calendar.MONTH)+1).toString().padStart(2, '0') + "-" +
+			budget.startDate.get(Calendar.YEAR)
+		    var endDateString = "" +
+			budget.endDate.get(Calendar.DATE).toString().padStart(2, '0') + "-" +
+			(budget.endDate.get(Calendar.MONTH)+1).toString().padStart(2, '0') + "-" +
+			budget.endDate.get(Calendar.YEAR)
+
 		    Card (
 			modifier = Modifier,
 			onClick = { onBudgetClick(budget.id) }
@@ -73,7 +86,7 @@ fun BudgetsView(
 				Text(budget.desc.substring(0, min(budget.desc.length, 10)))
 				Text(budget.limit.toString())
 				Text("-" + budget.spent.toString())
-				Text(budget.startDate.toString() + " to " + budget.endDate.toString())
+				Text(startDateString + " to " + endDateString)
 			    }
 
 			}

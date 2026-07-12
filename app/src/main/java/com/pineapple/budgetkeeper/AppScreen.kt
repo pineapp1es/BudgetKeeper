@@ -71,6 +71,7 @@ fun MainScreen(
 			onDelete = { budget, moveToBudgetId ->
 			    viewModel.deleteBudget(budget, moveToBudgetId)
 			},
+			isNew = budget.id == 0.toLong(),
 		    )
 		}
 
@@ -99,29 +100,13 @@ fun MainScreen(
 		// expenses
 		composable(route = Views.EXPENSELIST.name) {
 		    ExpensesView(uiState.expenses,
-				 onExpenseClick = { expenseId ->
-				     navController.navigate(Views.EXPENSEEDIT.name + "/${expenseId}")
+				 onExpenseClick = { expenseId, budgetId ->
+				     navController.navigate(Views.EXPENSEEDIT.name +
+								"/${expenseId}/${budgetId}")
 				 },
 				 onDelete = { expense -> viewModel.deleteExpense(expense) },
 				 canCreateNew = uiState.budgets.size > 0,
 		    )
-		}
-
-		composable(route = Views.EXPENSEEDIT.name + "/{expenseId}") { backStackEntry ->
-
-		    if (uiState.budgets.size != 0) {
-			val expenseId = backStackEntry.arguments?.getString("expenseId")?.toLongOrNull()
-			val expense = uiState.getExpenseByIdOrNew(expenseId, null)
-
-			ExpenseEditView(
-			    expense,
-			    uiState.budgets,
-			    onSave = { updateExpense -> viewModel.addOrUpdateExpense(updateExpense) },
-			    onDelete = { expense -> viewModel.deleteExpense(expense) },
-			)
-		    }
-		    else navController.navigate(Views.BUDGETLIST.name)
-
 		}
 		composable(route = Views.EXPENSEEDIT.name + "/{expenseId}/{budgetId}") { backStackEntry ->
 
@@ -135,6 +120,7 @@ fun MainScreen(
 			    uiState.budgets,
 			    onSave = { updateExpense -> viewModel.addOrUpdateExpense(updateExpense) },
 			    onDelete = { expense -> viewModel.deleteExpense(expense) },
+			    isNew = expense.id == 0.toLong(),
 			)
 		    }
 		    else navController.navigate(Views.BUDGETLIST.name)

@@ -4,7 +4,7 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 import com.pineapple.budgetkeeper.utils.getRandomString
-import java.util.Date
+import java.util.Calendar
 import kotlin.arrayOf
 
 const val EXPENSEIDLENGTH = 10
@@ -25,7 +25,7 @@ data class Expense(
     val name: String,
     val reason: String,
     val cost: Double,
-    val date: Date,
+    val date: Calendar,
 ) {
     companion object {
 	fun newExpense(budgetId: Long = 0): Expense {
@@ -34,7 +34,7 @@ data class Expense(
 		name="new-expense",
 		reason="expense-reason",
 		cost=0.0,
-		date=Date(),
+		date= Calendar.getInstance(),
 	    )
 	}
     }
