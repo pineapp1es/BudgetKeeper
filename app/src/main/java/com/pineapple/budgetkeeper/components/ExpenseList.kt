@@ -27,6 +27,7 @@ import androidx.compose.ui.Modifier
 @Composable
 fun ExpenseList(
     expenses: List<Expense>,
+    inBudget: Long? = null,
     onExpenseClick: (Long?, Long?) -> Unit,
     onDelete: (Expense) -> Unit,
     canCreateNew: Boolean,
@@ -49,7 +50,7 @@ fun ExpenseList(
 	    modifier = Modifier,
 	    onClick = {
 		if (canCreateNew)
-		    onExpenseClick(null, null)
+		    onExpenseClick(null, inBudget)
 		else
 		    showToast = true
 	    }

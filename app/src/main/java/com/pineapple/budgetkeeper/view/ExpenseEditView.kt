@@ -16,6 +16,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
@@ -70,6 +71,13 @@ fun ExpenseEditView(
     val timeH: Int = expense.date.get(Calendar.HOUR_OF_DAY)
     val timeM: Int = expense.date.get(Calendar.MINUTE)
     val timeState = rememberTimePickerState(timeH, timeM)
+
+    val activeBudgets = budgets.filter {
+	it.endDate.getTime() > Date() &&
+	it.startDate.getTime() < Date()
+    }
+    val oldBudgets = budgets.filter { it.endDate.getTime() < Date() }
+    val futureBudgets = budgets.filter { it.startDate.getTime() > Date() }
 
     Box(
 	modifier = Modifier
@@ -141,12 +149,28 @@ fun ExpenseEditView(
 		    onDismissRequest = { budgetIdMenuExpanded = false },
 		) {
 
-		    budgets.forEach { budget ->
+		    HorizontalDivider()
+		    Text("Active")
+		    HorizontalDivider()
+
+		    activeBudgets.forEach { budget ->
 			DropdownMenuItem(
 			    text = { Text(budget.name) },
 			    onClick = { selectedBudget = budget; budgetIdMenuExpanded = false },
 			)
 		    }
+
+		    HorizontalDivider()
+		    Text("Inactive")
+		    HorizontalDivider()
+
+		    oldBudgets.forEach { budget ->
+			DropdownMenuItem(
+			    text = { Text(budget.name) },
+			    onClick = { selectedBudget = budget; budgetIdMenuExpanded = false },
+			)
+		    }
+
 		}
 
 		// name text field

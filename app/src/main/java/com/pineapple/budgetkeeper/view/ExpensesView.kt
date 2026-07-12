@@ -16,10 +16,10 @@ fun ExpensesView(
 
     Box {
 	ExpenseList(
-	    expenses,
-	    onExpenseClick,
-	    onDelete,
-	    canCreateNew,
+	    expenses = expenses,
+	    onExpenseClick = onExpenseClick,
+	    onDelete = onDelete,
+	    canCreateNew = canCreateNew,
 	)
     }
 }

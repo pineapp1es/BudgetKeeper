@@ -94,6 +94,9 @@ fun MainScreen(
 				       navController.navigate(Views.EXPENSEEDIT.name +
 								  "/${expenseId}/${budgetId}")
 				   },
+				   onExpenseDelete = { expense ->
+				       viewModel.deleteExpense(expense)
+				   },
 		    )
 		}
 

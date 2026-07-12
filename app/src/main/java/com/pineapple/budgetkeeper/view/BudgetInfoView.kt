@@ -35,12 +35,13 @@ fun BudgetInfoView(budget: Budget,
 		   onBudgetEdit: (Long?) -> Unit,
 		   onBudgetDelete: (Budget, Long?) -> Unit,
 		   onExpenseClick: (Long?, Long?) -> Unit,
+		   onExpenseDelete: (Expense) -> Unit,
 ) {
 
     Box {
 	Column {
 	    BudgetSection(budget, onBudgetEdit, onBudgetDelete)
-	    ExpensesSection(expenses, budget.id, onExpenseClick)
+	    ExpensesSection(expenses, budget.id, onExpenseClick, onExpenseDelete)
 	}
     }
 
@@ -93,11 +94,17 @@ fun BudgetSection(budget: Budget, onBudgetEdit: (Long?) -> Unit, onBudgetDelete:
 
 
 @Composable
-fun ExpensesSection(expenses: List<Expense>,
-		    budgetId: Long,
-		    onExpenseClick: (Long?, Long?) -> Unit) {
-//     ExpenseList(
-// 	expenses,
-// 	onExpenseClick,
-//     )
+fun ExpensesSection(
+    expenses: List<Expense>,
+    budgetId: Long,
+    onExpenseClick: (Long?, Long?) -> Unit,
+    onExpenseDelete: (Expense) -> Unit,
+) {
+    ExpenseList(
+	expenses = expenses,
+	inBudget = budgetId,
+	onExpenseClick = onExpenseClick,
+	onDelete = onExpenseDelete,
+	canCreateNew = true,
+    )
 }
