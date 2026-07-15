@@ -57,6 +57,7 @@ fun BudgetSection(budget: Budget, onBudgetEdit: (Long?) -> Unit, onBudgetDelete:
 		.padding(20.dp)
 	   ,
 	) {
+	    Text(budget.name)
 	    IconButton(
 		modifier = Modifier,
 		onClick = { onBudgetEdit(budget.id) }
@@ -71,6 +72,7 @@ fun BudgetSection(budget: Budget, onBudgetEdit: (Long?) -> Unit, onBudgetDelete:
 		Icon(painterResource(R.drawable.baseline_delete_24), "Delete Budget")
 	    }
 	}
+	Text(budget.desc)
 
 	Row(
             modifier = Modifier

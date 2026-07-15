@@ -3,6 +3,7 @@ package com.pineapple.budgetkeeper.view
 import com.pineapple.budgetkeeper.database.entities.Budget
 import com.pineapple.budgetkeeper.R
 import com.pineapple.budgetkeeper.database.BudgetNotifierDatabase
+import com.pineapple.budgetkeeper.components.Toast
 
 import androidx.compose.runtime.Composable
 import androidx.compose.foundation.layout.Column
@@ -31,6 +32,10 @@ import androidx.compose.material3.getSelectedStartDate
 import androidx.compose.material3.rememberDateRangePickerState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 
 
 @Composable
@@ -40,11 +45,21 @@ fun BudgetEditView(budget: Budget,
 		   isNew: Boolean = false,
 ) {
 
+    var toastMessage by remember { mutableStateOf("") }
+    if (toastMessage != "") {
+	Toast(
+	    title = { Text(toastMessage) },
+	    content = {},
+	    onDismiss = { toastMessage = "" },
+	    xoffset = 20.dp,
+	    yoffset = 20.dp,
+	)
+    }
+
     // create states for text fields
     val nameTextState = rememberTextFieldState(budget.name)
     val descTextState = rememberTextFieldState(budget.desc)
     val limitTextState = rememberTextFieldState(budget.limit.toString())
-    val spentTextState = rememberTextFieldState(budget.spent.toString())
     val startDate: LocalDate = budget.startDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate(); 
     val endDate: LocalDate = budget.endDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate(); 
     val dateRangeState = rememberDateRangePickerState(startDate, endDate);
@@ -68,23 +83,39 @@ fun BudgetEditView(budget: Budget,
 		IconButton(
 		    modifier = Modifier,
 		    onClick = {
+
+			var validInputs = true
+			var newLimit: Double = 0.0
+
+			try {
+			    newLimit = limitTextState.text.toString().toDouble()
+			    if (newLimit <= 0) throw Exception()
+			}
+			catch(e: Exception) {
+			    toastMessage = "Enter a valid limit"
+			    validInputs = false
+			}
+
 			val startCal = Calendar.getInstance()
 			startCal.setTime(Date.from(dateRangeState.getSelectedStartDate()!!.atStartOfDay(ZoneId.systemDefault()).toInstant()))
 
 			val endCal = Calendar.getInstance()
 			endCal.setTime(Date.from(dateRangeState.getSelectedEndDate()!!.atStartOfDay(ZoneId.systemDefault()).toInstant()))
 
-			val editedBudget = Budget(
-			    id = budget.id,
-			    name = nameTextState.text.toString(),
-			    desc = descTextState.text.toString(),
-			    limit = limitTextState.text.toString().toDouble(),
-			    spent = spentTextState.text.toString().toDouble(),
-			    startDate = startCal,
-			    endDate = endCal,
-			)
+			if (validInputs) {
+			    val editedBudget = Budget(
+				id = budget.id,
+				name = nameTextState.text.toString(),
+				desc = descTextState.text.toString(),
+				limit = newLimit,
+				spent = budget.spent,
+				startDate = startCal,
+				endDate = endCal,
+			    )
 
-			onSave(editedBudget)
+			    onSave(editedBudget)
+			}
+			
 		    },
 		) {
 		    Icon(painterResource(R.drawable.baseline_save_24), "Save Budget")
@@ -120,12 +151,6 @@ fun BudgetEditView(budget: Budget,
 		TextField(
 		    state = limitTextState,
 		    label = { Text("Limit") },
-		)
-
-		// spent text field
-		TextField(
-		    state = spentTextState,
-		    label = { Text("Spent") },
 		)
 
 		// date range picker !!

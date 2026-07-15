@@ -48,8 +48,9 @@ fun BudgetCard(
 	    Column {
 		Text(budget.name)
 		Text(budget.desc.substring(0, min(budget.desc.length, 10)))
-		Text(budget.limit.toString())
-		Text("-" + budget.spent.toString())
+		Text("  " + budget.limit.toString())
+		Text("- " + budget.spent.toString())
+		Text("= " + (budget.limit - budget.spent).toString())
 		Text(startDateString + " to " + endDateString)
 	    }
 

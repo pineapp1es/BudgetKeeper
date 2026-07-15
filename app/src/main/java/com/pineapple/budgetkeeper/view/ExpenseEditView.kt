@@ -54,6 +54,17 @@ fun ExpenseEditView(
     isNew: Boolean = false,
 ) {
 
+    var toastMessage by remember { mutableStateOf("") }
+    if (toastMessage != "") {
+	Toast(
+	    title = { Text(toastMessage) },
+	    content = {},
+	    onDismiss = { toastMessage = "" },
+	    xoffset = 20.dp,
+	    yoffset = 20.dp,
+	)
+    }
+
     var selectedBudget: Budget by remember {
 	mutableStateOf(
 	    budgets.find { it.id == expense.budgetId }
@@ -98,21 +109,35 @@ fun ExpenseEditView(
 		    modifier = Modifier,
 		    onClick = {
 
+			var validInputs = true
+			var newCost: Double = 0.0
+
+			try {
+			    newCost = costTextState.text.toString().toDouble()
+			    if (newCost <= 0) throw Exception()
+			}
+			catch(e: Exception) {
+			    toastMessage = "Enter a valid cost"
+			    validInputs = false
+			}
 
 			val newDate = Calendar.getInstance()
 			newDate.setTime(Date.from(dateState.getSelectedDate()!!.atStartOfDay(ZoneId.systemDefault()).toInstant()))
 			newDate.set(Calendar.HOUR_OF_DAY, timeState.hour)
 			newDate.set(Calendar.MINUTE, timeState.minute)
-			val editedExpense = Expense(
-			    id = expense.id,
-			    budgetId = selectedBudget.id,
-			    name = nameTextState.text.toString(),
-			    reason = reasonTextState.text.toString(),
-			    cost = costTextState.text.toString().toDouble(),
-			    date = newDate,
-			)
 
-			onSave(editedExpense)
+			if (validInputs) {
+			    val editedExpense = Expense(
+				id = expense.id,
+				budgetId = selectedBudget.id,
+				name = nameTextState.text.toString(),
+				reason = reasonTextState.text.toString(),
+				cost = newCost,
+				date = newDate,
+			    )
+
+			    onSave(editedExpense)
+			}
 		    },
 		) {
 		    Icon(painterResource(R.drawable.baseline_save_24), "Save Expense")
