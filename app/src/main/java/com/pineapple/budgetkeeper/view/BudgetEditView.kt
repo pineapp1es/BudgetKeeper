@@ -39,10 +39,11 @@ import androidx.compose.runtime.mutableStateOf
 
 
 @Composable
-fun BudgetEditView(budget: Budget,
-		   onSave: (Budget) -> Unit,
-		   onDelete: (Budget, Long?) -> Unit,
-		   isNew: Boolean = false,
+fun BudgetEditView(
+    budget: Budget,
+    onSave: (Budget) -> Unit,
+    onDelete: (Budget, Budget?) -> Unit,
+    isNew: Boolean = false,
 ) {
 
     var toastMessage by remember { mutableStateOf("") }

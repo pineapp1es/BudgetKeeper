@@ -40,102 +40,113 @@ fun MainScreen(
     Scaffold(
         bottomBar = { BottomBar(navBackStackEntry?.destination?.route, { route -> navController.navigate(route) }) }
     ) { innerPadding ->
-	Box( modifier= Modifier.padding(innerPadding) ) {
-	    NavHost(
-		navController = navController,
-		startDestination = Views.BUDGETLIST.name,
-	    ) {
+        Box( modifier= Modifier.padding(innerPadding) ) {
+            NavHost(
+                navController = navController,
+                startDestination = Views.BUDGETLIST.name,
+            ) {
 
-		// budgets
-		composable(route = Views.BUDGETLIST.name) {
-		    BudgetsView(uiState.budgets,
-				onNewClick = { 
-				    navController.navigate(Views.BUDGETEDIT.name + "/${null}")
-				},
-				onBudgetClick = { budgetId ->
-				    navController.navigate(Views.BUDGETINFO.name + "/${budgetId}")
-				},
-				onDelete = { budget, moveToBudgetId ->
-				    viewModel.deleteBudget(budget, moveToBudgetId)
-				},
-		    )
-		}
-		composable(route = Views.BUDGETEDIT.name + "/{budgetId}") { backStackEntry ->
+                // budgets
+                composable(route = Views.BUDGETLIST.name) {
+                    BudgetsView(uiState.budgets,
+                                onNewClick = { 
+                                    navController.navigate(Views.BUDGETEDIT.name + "/${null}")
+                                },
+                                onBudgetClick = { budget ->
+                                    navController.navigate(Views.BUDGETINFO.name + "/${budget.id}")
+                                },
+                                onDelete = { budget, moveToBudgetId ->
+                                    viewModel.deleteBudget(budget, moveToBudgetId)
+                                },
+                    )
+                }
+                composable(route = Views.BUDGETEDIT.name + "/{budgetId}") { backStackEntry ->
 
-		    val budgetId = backStackEntry.arguments?.getString("budgetId")?.toLongOrNull()
-		    val budget = uiState.getBudgetByIdOrNew(budgetId)
+                    val budgetId = backStackEntry.arguments?.getString("budgetId")?.toLongOrNull()
+                    val budget = uiState.getBudgetByIdOrNew(budgetId)
 
-		    BudgetEditView(
-			budget,
+                    BudgetEditView(
+                        budget,
                         onSave = { updateBudget -> viewModel.addOrUpdateBudget(updateBudget) },
-			onDelete = { budget, moveToBudgetId ->
-			    viewModel.deleteBudget(budget, moveToBudgetId)
-			},
-			isNew = budget.id == 0.toLong(),
-		    )
-		}
+                        onDelete = { budget, moveToBudgetId ->
+                            viewModel.deleteBudget(budget, moveToBudgetId)
+                        },
+                        isNew = budget.id == 0.toLong(),
+                    )
+                }
 
-		composable(route = Views.BUDGETINFO.name + "/{budgetId}") { backStackEntry ->
+                composable(route = Views.BUDGETINFO.name + "/{budgetId}") { backStackEntry ->
 
-		    val budgetId = backStackEntry.arguments?.getString("budgetId")!!.toLong()
-		    val budget = uiState.getBudgetByIdOrNew(budgetId)
-		    val expenses = uiState.getExpensesByBudgetId(budgetId)
+                    val budgetId = backStackEntry.arguments?.getString("budgetId")!!.toLong()
+                    val budget = uiState.getBudgetByIdOrNew(budgetId)
+                    val expenses = uiState.getExpensesByBudgetId(budgetId)
 
-		    BudgetInfoView(budget = budget,
-				   expenses =  expenses,
-				   onBudgetEdit = { budgetId ->
-				       navController.navigate(Views.BUDGETEDIT.name +
-								  "/${budgetId}")
-				   },
-				   onBudgetDelete = { budget, moveToBudgetId ->
-				       viewModel.deleteBudget(budget, moveToBudgetId)
-				   },
-				   onExpenseClick = { expenseId, budgetId ->
-				       navController.navigate(Views.EXPENSEEDIT.name +
-								  "/${expenseId}/${budgetId}")
-				   },
-				   onExpenseDelete = { expense ->
-				       viewModel.deleteExpense(expense)
-				   },
-		    )
-		}
+                    BudgetInfoView(
+                        budget = budget,
+                        expenses =  expenses,
+                        onBudgetEdit = { budget ->
+                            navController.navigate(Views.BUDGETEDIT.name +
+                                                       "/${budget.id}")
+                        },
+                        onBudgetDelete = { budget, moveToBudgetId ->
+                            viewModel.deleteBudget(budget, moveToBudgetId)
+                        },
+                        onExpenseClick = { expense ->
+                            navController.navigate(Views.EXPENSEEDIT.name +
+                                                       "/${expense.id}/${expense.budgetId}")
+                        },
+                        onExpenseHold = { expense ->
+                        },
+                        onExpenseDelete = { expense ->
+                            viewModel.deleteExpense(expense)
+                        },
+                        onNewExpenseClick = {
+                            navController.navigate(Views.EXPENSEEDIT.name + "/${null}/${null}")
+                        }
+                    )
+                }
 
-		// expenses
-		composable(route = Views.EXPENSELIST.name) {
-		    ExpensesView(uiState.expenses,
-				 onExpenseClick = { expenseId, budgetId ->
-				     navController.navigate(Views.EXPENSEEDIT.name +
-								"/${expenseId}/${budgetId}")
-				 },
-				 onDelete = { expense -> viewModel.deleteExpense(expense) },
-				 canCreateNew = uiState.budgets.size > 0,
-		    )
-		}
-		composable(route = Views.EXPENSEEDIT.name + "/{expenseId}/{budgetId}") { backStackEntry ->
+                // expenses
+                composable(route = Views.EXPENSELIST.name) {
+                    ExpensesView(
+                        uiState.expenses,
+                        onExpenseClick = { expense ->
+                            navController.navigate(Views.EXPENSEEDIT.name +
+                                                       "/${expense.id}/${expense.budgetId}")
+                        },
+                        onExpenseDelete = { expense -> viewModel.deleteExpense(expense) },
+                        canCreateNew = uiState.budgets.size > 0,
+                        onExpenseHold = { expense -> },
+                        onNewExpenseClick = {
+                            navController.navigate(Views.EXPENSEEDIT.name + "/${null}/${null}")
+                        },
+                    )
+                }
+                composable(route = Views.EXPENSEEDIT.name + "/{expenseId}/{budgetId}") { backStackEntry ->
 
-		    if (uiState.budgets.size != 0) {
-			val expenseId = backStackEntry.arguments?.getString("expenseId")?.toLongOrNull()
-			val budgetId = backStackEntry.arguments?.getString("budgetId")?.toLongOrNull()
-			val expense = uiState.getExpenseByIdOrNew(expenseId, budgetId)
+                    if (uiState.budgets.size != 0) {
+                        val expenseId = backStackEntry.arguments?.getString("expenseId")?.toLongOrNull()
+                        val budgetId = backStackEntry.arguments?.getString("budgetId")?.toLongOrNull()
+                        val expense = uiState.getExpenseByIdOrNew(expenseId, budgetId)
 
-			ExpenseEditView(
-			    expense,
-			    uiState.budgets,
-			    onSave = { updateExpense -> viewModel.addOrUpdateExpense(updateExpense) },
-			    onDelete = { expense -> viewModel.deleteExpense(expense) },
-			    isNew = expense.id == 0.toLong(),
-			)
-		    }
-		    else navController.navigate(Views.BUDGETLIST.name)
+                        ExpenseEditView(
+                            expense,
+                            uiState.budgets,
+                            onSave = { updateExpense -> viewModel.addOrUpdateExpense(updateExpense) },
+                            onDelete = { expense -> viewModel.deleteExpense(expense) },
+                            isNew = expense.id == 0.toLong(),
+                        )
+                    }
+                    else navController.navigate(Views.BUDGETLIST.name)
 
-		}
+                }
 
-		//other
-		composable(route = Views.SETTINGS.name) {
-		    SettingsView()
-		}
-	    }
-	}
+                //other
+                composable(route = Views.SETTINGS.name) {
+                    SettingsView()
+                }
+            }
+        }
     }
 }
 
@@ -150,21 +161,21 @@ fun BottomBar(currentRoute: String?, navigate: (String) -> Unit) {
             modifier = Modifier
                 .padding(20.dp),
             onClick = {
-		navigate(Views.SETTINGS.name)
+                navigate(Views.SETTINGS.name)
             }) {
             Icon(painterResource(R.drawable.baseline_settings_24), "Settings View")
         }
 
-	Text(currentRoute ?: "idk")
+        Text(currentRoute ?: "idk")
 
         IconButton(
             modifier = Modifier
                 .padding(20.dp),
             onClick = {
-		if (currentRoute == Views.BUDGETLIST.name)
-		    navigate(Views.EXPENSELIST.name)
-		else
-		    navigate(Views.BUDGETLIST.name)
+                if (currentRoute == Views.BUDGETLIST.name)
+                    navigate(Views.EXPENSELIST.name)
+                else
+                    navigate(Views.BUDGETLIST.name)
             }) {
             Icon(painterResource(R.drawable.baseline_arrow_forward_ios_24), "Switch to view")
         }

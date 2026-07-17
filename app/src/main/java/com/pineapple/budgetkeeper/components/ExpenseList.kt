@@ -2,7 +2,9 @@ package com.pineapple.budgetkeeper.components
 
 import com.pineapple.budgetkeeper.R
 import com.pineapple.budgetkeeper.database.entities.Expense
+import com.pineapple.budgetkeeper.database.entities.Budget
 import com.pineapple.budgetkeeper.components.Toast
+import com.pineapple.budgetkeeper.components.ExpenseCard
 
 import java.util.Calendar
 
@@ -27,9 +29,11 @@ import androidx.compose.ui.Modifier
 @Composable
 fun ExpenseList(
     expenses: List<Expense>,
-    inBudget: Long? = null,
-    onExpenseClick: (Long?, Long?) -> Unit,
-    onDelete: (Expense) -> Unit,
+    inBudget: Budget? = null,
+    onNewExpenseClick: () -> Unit,
+    onExpenseClick: (Expense) -> Unit,
+    onExpenseHold: (Expense) -> Unit,
+    onExpenseDelete: (Expense) -> Unit,
     canCreateNew: Boolean,
 ) {
 
@@ -50,7 +54,7 @@ fun ExpenseList(
 	    modifier = Modifier,
 	    onClick = {
 		if (canCreateNew)
-		    onExpenseClick(null, inBudget)
+		    onNewExpenseClick()
 		else
 		    showToast = true
 	    }
@@ -60,29 +64,12 @@ fun ExpenseList(
 
 	LazyColumn {
 	    items(expenses) { expense ->
-
-		var dateString = "" +
-		    expense.date.get(Calendar.DATE).toString().padStart(2, '0') + "-" +
-		    (expense.date.get(Calendar.MONTH)+1).toString().padStart(2, '0') + "-" +
-		    expense.date.get(Calendar.YEAR)
-
-		Card(
-		    onClick = { onExpenseClick(expense.id, expense.budgetId) },
-		) {
-		    Row {
-			IconButton(
-			    onClick = { onDelete(expense) },
-			) {
-			    Icon(painterResource(R.drawable.baseline_delete_24), "Delete Expense")
-			}
-
-			Column {
-			    Text(expense.name)
-			    Text(expense.cost.toString())
-			    Text(dateString)
-			}
-		    }
-		}
+                ExpenseCard(
+                    expense = expense,
+                    onClick = onExpenseClick,
+                    onDelete = onExpenseDelete,
+                    onHold = onExpenseHold,
+                )
 	    }
 	}
     }

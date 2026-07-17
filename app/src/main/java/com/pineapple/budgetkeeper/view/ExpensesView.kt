@@ -9,8 +9,10 @@ import androidx.compose.foundation.layout.Box
 @Composable
 fun ExpensesView(
     expenses: List<Expense>,
-    onExpenseClick: (Long?, Long?) -> Unit,
-    onDelete: (Expense) -> Unit,
+    onExpenseClick: (Expense) -> Unit,
+    onExpenseHold: (Expense) -> Unit,
+    onExpenseDelete: (Expense) -> Unit,
+    onNewExpenseClick: () -> Unit,
     canCreateNew: Boolean,
 ) {
 
@@ -18,8 +20,10 @@ fun ExpensesView(
 	ExpenseList(
 	    expenses = expenses,
 	    onExpenseClick = onExpenseClick,
-	    onDelete = onDelete,
+	    onExpenseDelete = onExpenseDelete,
 	    canCreateNew = canCreateNew,
+            onNewExpenseClick = onNewExpenseClick,
+            onExpenseHold = onExpenseHold,
 	)
     }
 }

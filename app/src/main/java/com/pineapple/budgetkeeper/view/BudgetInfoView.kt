@@ -30,25 +30,43 @@ import androidx.compose.material3.IconButton
 import androidx.compose.ui.res.painterResource
 
 @Composable
-fun BudgetInfoView(budget: Budget,
-		   expenses: List<Expense>,
-		   onBudgetEdit: (Long?) -> Unit,
-		   onBudgetDelete: (Budget, Long?) -> Unit,
-		   onExpenseClick: (Long?, Long?) -> Unit,
-		   onExpenseDelete: (Expense) -> Unit,
+fun BudgetInfoView(
+    budget: Budget,
+    expenses: List<Expense>,
+    onBudgetEdit: (Budget) -> Unit,
+    onBudgetDelete: (Budget, Budget?) -> Unit,
+    onNewExpenseClick: () -> Unit,
+    onExpenseClick: (Expense) -> Unit,
+    onExpenseHold: (Expense) -> Unit,
+    onExpenseDelete: (Expense) -> Unit,
 ) {
 
     Box {
 	Column {
-	    BudgetSection(budget, onBudgetEdit, onBudgetDelete)
-	    ExpensesSection(expenses, budget.id, onExpenseClick, onExpenseDelete)
+	    BudgetSection(
+                budget = budget,
+                onBudgetEdit = onBudgetEdit,
+                onBudgetDelete = onBudgetDelete,
+            )
+	    ExpensesSection(
+                expenses = expenses,
+                budget = budget,
+                onExpenseClick = onExpenseClick,
+                onExpenseDelete = onExpenseDelete,
+                onExpenseHold = onExpenseHold,
+                onNewExpenseClick = onNewExpenseClick,
+            )
 	}
     }
 
 }
 
 @Composable
-fun BudgetSection(budget: Budget, onBudgetEdit: (Long?) -> Unit, onBudgetDelete: (Budget, Long?) -> Unit) {
+fun BudgetSection(
+    budget: Budget,
+    onBudgetEdit: (Budget) -> Unit,
+    onBudgetDelete: (Budget, Budget?) -> Unit
+) {
 
     Column(modifier = Modifier.offset(x = 80.dp, y = 20.dp)) {
 	Row(
@@ -60,7 +78,7 @@ fun BudgetSection(budget: Budget, onBudgetEdit: (Long?) -> Unit, onBudgetDelete:
 	    Text(budget.name)
 	    IconButton(
 		modifier = Modifier,
-		onClick = { onBudgetEdit(budget.id) }
+		onClick = { onBudgetEdit(budget) }
 	    ) {
 		Icon(painterResource(R.drawable.baseline_edit_24), "Edit Budget")
 	    }
@@ -98,15 +116,19 @@ fun BudgetSection(budget: Budget, onBudgetEdit: (Long?) -> Unit, onBudgetDelete:
 @Composable
 fun ExpensesSection(
     expenses: List<Expense>,
-    budgetId: Long,
-    onExpenseClick: (Long?, Long?) -> Unit,
+    budget: Budget,
+    onExpenseHold: (Expense) -> Unit,
+    onExpenseClick: (Expense) -> Unit,
     onExpenseDelete: (Expense) -> Unit,
+    onNewExpenseClick: () -> Unit,
 ) {
     ExpenseList(
 	expenses = expenses,
-	inBudget = budgetId,
+	inBudget = budget,
+        onNewExpenseClick = onNewExpenseClick,
+        onExpenseHold = onExpenseHold,
 	onExpenseClick = onExpenseClick,
-	onDelete = onExpenseDelete,
+	onExpenseDelete = onExpenseDelete,
 	canCreateNew = true,
     )
 }

@@ -46,7 +46,7 @@ interface ExpenseDao {
 	       SET budgetId = :newBudgetId
 	       WHERE budgetId = :oldBudgetId
 	   """)
-    suspend fun moveExpensesToBudget(oldBudgetId: Long, newBudgetId: Long)
+    suspend fun moveExpensesFromOldToNewBudget(oldBudgetId: Long, newBudgetId: Long)
 
     @Query("""
 	       UPDATE Expense

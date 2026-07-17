@@ -32,8 +32,8 @@ import androidx.compose.foundation.lazy.items
 fun BudgetsView(
     budgets: List<Budget>,
     onNewClick: () -> Unit,
-    onBudgetClick: (Long?) -> Unit,
-    onDelete: (Budget, Long?) -> Unit,
+    onBudgetClick: (Budget) -> Unit,
+    onDelete: (Budget, Budget?) -> Unit,
 ) {
 
     val activeBudgets = budgets.filter {
@@ -66,7 +66,7 @@ fun BudgetsView(
 		items(activeBudgets) { budget ->
 		    BudgetCard(
 			budget = budget,
-			onBudgetClick = onBudgetClick,
+			onClick = onBudgetClick,
 			onDelete = onDelete,
 		    )
 		}
@@ -77,7 +77,7 @@ fun BudgetsView(
 		items(futureBudgets) { budget ->
 		    BudgetCard(
 			budget = budget,
-			onBudgetClick = onBudgetClick,
+			onClick = onBudgetClick,
 			onDelete = onDelete,
 		    )
 		}
@@ -88,7 +88,7 @@ fun BudgetsView(
 		items(oldBudgets) { budget ->
 		    BudgetCard(
 			budget = budget,
-			onBudgetClick = onBudgetClick,
+			onClick = onBudgetClick,
 			onDelete = onDelete,
 		    )
 		}

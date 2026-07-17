@@ -49,7 +49,7 @@ class MainActivityViewModel(
 	}
     }
 
-    fun deleteBudget(budget: Budget, moveExpensesTo: Long?) {
+    fun deleteBudget(budget: Budget, moveExpensesTo: Budget?) {
 	viewModelScope.launch {
 	    budgetRepo.deleteBudget(budget, moveExpensesTo)
 	}
@@ -64,6 +64,12 @@ class MainActivityViewModel(
     fun moveExpenseTo(expenseId: Long, budgetId: Long) {
 	viewModelScope.launch {
 	    budgetRepo.moveExpenseTo(expenseId, budgetId)
+	}
+    }
+
+    fun moveMultipleExpensesTo(expenseIds: List<Long>, budgetId: Long) {
+	viewModelScope.launch {
+	    budgetRepo.moveMultipleExpensesTo(expenseIds, budgetId)
 	}
     }
 
