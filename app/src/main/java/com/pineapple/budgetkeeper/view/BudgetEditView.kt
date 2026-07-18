@@ -4,6 +4,7 @@ import com.pineapple.budgetkeeper.database.entities.Budget
 import com.pineapple.budgetkeeper.R
 import com.pineapple.budgetkeeper.database.BudgetNotifierDatabase
 import com.pineapple.budgetkeeper.components.Toast
+import com.pineapple.budgetkeeper.uistate.BudgetEditUiState
 
 import androidx.compose.runtime.Composable
 import androidx.compose.foundation.layout.Column
@@ -40,11 +41,13 @@ import androidx.compose.runtime.mutableStateOf
 
 @Composable
 fun BudgetEditView(
-    budget: Budget,
+    uiState: BudgetEditUiState,
     onSave: (Budget) -> Unit,
-    onDelete: (Budget, Budget?) -> Unit,
+    onDelete: (Budget) -> Unit,
     isNew: Boolean = false,
 ) {
+
+    val budget = uiState.budget!!
 
     var toastMessage by remember { mutableStateOf("") }
     if (toastMessage != "") {
@@ -125,7 +128,7 @@ fun BudgetEditView(
 		if (!isNew) {
 		    IconButton(
 			modifier = Modifier,
-			onClick = { onDelete(budget, null) }
+			onClick = { onDelete(budget) }
 		    ) {
 			Icon(painterResource(R.drawable.baseline_delete_24), "Delete Budget")
 		    }

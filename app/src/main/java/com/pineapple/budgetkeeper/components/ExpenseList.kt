@@ -31,6 +31,7 @@ fun ExpenseList(
     expenses: List<Expense>,
     inBudget: Budget? = null,
     onNewExpenseClick: () -> Unit,
+    budgetNames: Map<Long, String>? = null,
     onExpenseClick: (Expense) -> Unit,
     onExpenseHold: (Expense) -> Unit,
     onExpenseDelete: (Expense) -> Unit,
@@ -66,6 +67,7 @@ fun ExpenseList(
 	    items(expenses) { expense ->
                 ExpenseCard(
                     expense = expense,
+                    budgetName = budgetNames?.get(expense.budgetId),
                     onClick = onExpenseClick,
                     onDelete = onExpenseDelete,
                     onHold = onExpenseHold,

@@ -5,6 +5,7 @@ import com.pineapple.budgetkeeper.database.entities.Budget
 import com.pineapple.budgetkeeper.R
 import com.pineapple.budgetkeeper.database.BudgetNotifierDatabase
 import com.pineapple.budgetkeeper.components.Toast
+import com.pineapple.budgetkeeper.uistate.ExpenseEditUiState
 
 import androidx.compose.runtime.Composable
 import androidx.compose.foundation.layout.Column
@@ -47,12 +48,14 @@ import androidx.compose.runtime.mutableStateOf
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ExpenseEditView(
-    expense: Expense,
-    budgets: List<Budget>,
+    uiState: ExpenseEditUiState,
     onSave: (Expense) -> Unit,
     onDelete: (Expense) -> Unit,
-    isNew: Boolean = false,
 ) {
+
+    val expense = uiState.expense!!
+    val budgets = uiState.activeBudgetNames
+    val isNew = uiState.isNewExpense
 
     var toastMessage by remember { mutableStateOf("") }
     if (toastMessage != "") {
@@ -65,12 +68,7 @@ fun ExpenseEditView(
 	)
     }
 
-    var selectedBudget: Budget by remember {
-	mutableStateOf(
-	    budgets.find { it.id == expense.budgetId }
-		?: budgets.get(0)
-	)
-    }
+    var selectedBudget by remember { mutableStateOf(expense.budgetId) }
     var budgetIdMenuExpanded by remember { mutableStateOf(false) }
 
     // create states for text fields
@@ -82,13 +80,6 @@ fun ExpenseEditView(
     val timeH: Int = expense.date.get(Calendar.HOUR_OF_DAY)
     val timeM: Int = expense.date.get(Calendar.MINUTE)
     val timeState = rememberTimePickerState(timeH, timeM)
-
-    val activeBudgets = budgets.filter {
-	it.endDate.getTime() > Date() &&
-	it.startDate.getTime() < Date()
-    }
-    val oldBudgets = budgets.filter { it.endDate.getTime() < Date() }
-    val futureBudgets = budgets.filter { it.startDate.getTime() > Date() }
 
     Box(
 	modifier = Modifier
@@ -129,7 +120,7 @@ fun ExpenseEditView(
 			if (validInputs) {
 			    val editedExpense = Expense(
 				id = expense.id,
-				budgetId = selectedBudget.id,
+				budgetId = selectedBudget,
 				name = nameTextState.text.toString(),
 				reason = reasonTextState.text.toString(),
 				cost = newCost,
@@ -159,7 +150,7 @@ fun ExpenseEditView(
 
 		Row {
 		    Text(
-			selectedBudget.name,
+			budgets[selectedBudget] ?: "",
 		    )
 		    IconButton(
 			onClick = { budgetIdMenuExpanded = true },
@@ -173,29 +164,15 @@ fun ExpenseEditView(
 		    expanded = budgetIdMenuExpanded,
 		    onDismissRequest = { budgetIdMenuExpanded = false },
 		) {
-
-		    HorizontalDivider()
-		    Text("Active")
-		    HorizontalDivider()
-
-		    activeBudgets.forEach { budget ->
+		    budgets.forEach { budget ->
 			DropdownMenuItem(
-			    text = { Text(budget.name) },
-			    onClick = { selectedBudget = budget; budgetIdMenuExpanded = false },
+			    text = { Text(budget.value) },
+			    onClick = {
+                                selectedBudget = budget.key
+                                budgetIdMenuExpanded = false
+                            },
 			)
 		    }
-
-		    HorizontalDivider()
-		    Text("Inactive")
-		    HorizontalDivider()
-
-		    oldBudgets.forEach { budget ->
-			DropdownMenuItem(
-			    text = { Text(budget.name) },
-			    onClick = { selectedBudget = budget; budgetIdMenuExpanded = false },
-			)
-		    }
-
 		}
 
 		// name text field

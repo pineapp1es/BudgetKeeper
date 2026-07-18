@@ -32,8 +32,8 @@ import androidx.compose.ui.unit.dp
 fun BudgetCard(
     budget: Budget,
     onClick: (Budget) -> Unit,
-    onDelete: (Budget, Budget?) -> Unit,
-    onHold: (Budget) -> Unit = { budget -> },
+    onDelete: (Budget) -> Unit,
+    onHold: (Budget) -> Unit,
 ) {
 
     var showToast by remember { mutableStateOf(false) }
@@ -56,8 +56,6 @@ fun BudgetCard(
         disabledContentColor = Color.Black,
     )
     var cardColors by remember { mutableStateOf(defaultCardColors) }
-
-
 
     var startDateString = "" +
 	budget.startDate.get(Calendar.DATE).toString().padStart(2, '0') + "-" +
@@ -86,7 +84,7 @@ fun BudgetCard(
 
 	    IconButton(
 		modifier = Modifier,
-		onClick = { onDelete(budget, null) }
+		onClick = { onDelete(budget) }
 	    ) {
 		Icon(painterResource(R.drawable.baseline_delete_24), "Delete Budget")
 	    }

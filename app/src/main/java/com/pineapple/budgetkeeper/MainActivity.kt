@@ -5,17 +5,12 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.activity.viewModels
-import androidx.annotation.RequiresApi
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 
 import com.pineapple.budgetkeeper.MainScreen
 import com.pineapple.budgetkeeper.Views
 import com.pineapple.budgetkeeper.database.BudgetNotifierDatabase
-import com.pineapple.budgetkeeper.database.BudgetRepository
 import com.pineapple.budgetkeeper.style.BudgetNotifierTheme
+import com.pineapple.budgetkeeper.container.BudgetKeeperContainer
 
 class MainActivity : ComponentActivity() {
 
@@ -23,12 +18,8 @@ class MainActivity : ComponentActivity() {
         BudgetNotifierDatabase.getDb(this)
     }
 
-    private val repository by lazy {
-        BudgetRepository(database)
-    }
-
-    private val viewModel: MainActivityViewModel by viewModels() {
-	MainActivityViewModelFactory(repository)
+    private val container by lazy {
+        BudgetKeeperContainer(database)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,9 +27,8 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
 
         setContent {
-            val view = remember { mutableStateOf(Views.BUDGETLIST) }
             BudgetNotifierTheme {
-                MainScreen(viewModel)
+                MainScreen(container)
             }
         }
     }

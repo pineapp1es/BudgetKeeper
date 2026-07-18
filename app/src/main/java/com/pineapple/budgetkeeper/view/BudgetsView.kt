@@ -3,6 +3,8 @@ package com.pineapple.budgetkeeper.view
 import com.pineapple.budgetkeeper.R
 import com.pineapple.budgetkeeper.Views
 import com.pineapple.budgetkeeper.components.BudgetCard
+import com.pineapple.budgetkeeper.viewmodel.BudgetListViewModel
+import com.pineapple.budgetkeeper.uistate.BudgetListUiState
 
 import java.util.Date
 
@@ -23,25 +25,22 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.mutableStateOf
 import com.pineapple.budgetkeeper.database.entities.Budget
 import androidx.compose.foundation.lazy.items
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 
 @Composable
 fun BudgetsView(
-    budgets: List<Budget>,
+    uiState: BudgetListUiState,
     onNewClick: () -> Unit,
     onBudgetClick: (Budget) -> Unit,
-    onDelete: (Budget, Budget?) -> Unit,
+    onBudgetDelete: (Budget) -> Unit,
+    onBudgetHold: (Budget) -> Unit,
 ) {
 
-    val activeBudgets = budgets.filter {
-	it.endDate.getTime() > Date() &&
-	it.startDate.getTime() < Date()
-    }
-    val oldBudgets = budgets.filter { it.endDate.getTime() < Date() }
-    val futureBudgets = budgets.filter { it.startDate.getTime() > Date() }
 
     Box(
 	modifier = Modifier
@@ -63,33 +62,36 @@ fun BudgetsView(
 		stickyHeader {
 		    Text("Active")
 		}
-		items(activeBudgets) { budget ->
+		items(uiState.activeBudgets) { budget ->
 		    BudgetCard(
 			budget = budget,
 			onClick = onBudgetClick,
-			onDelete = onDelete,
+			onDelete = onBudgetDelete,
+                        onHold = onBudgetHold,
 		    )
 		}
 
 		stickyHeader {
 		    Text("Future")
 		}
-		items(futureBudgets) { budget ->
+		items(uiState.futureBudgets) { budget ->
 		    BudgetCard(
 			budget = budget,
 			onClick = onBudgetClick,
-			onDelete = onDelete,
+			onDelete = onBudgetDelete,
+                        onHold = onBudgetHold,
 		    )
 		}
 
 		stickyHeader {
 		    Text("Inactive")
 		}
-		items(oldBudgets) { budget ->
+		items(uiState.inactiveBudgets) { budget ->
 		    BudgetCard(
 			budget = budget,
 			onClick = onBudgetClick,
-			onDelete = onDelete,
+			onDelete = onBudgetDelete,
+                        onHold = onBudgetHold,
 		    )
 		}
 

@@ -1,5 +1,6 @@
 package com.pineapple.budgetkeeper.view
 
+import com.pineapple.budgetkeeper.uistate.ExpenseListUiState
 import com.pineapple.budgetkeeper.database.entities.Expense
 import com.pineapple.budgetkeeper.components.ExpenseList
 
@@ -8,20 +9,20 @@ import androidx.compose.foundation.layout.Box
 
 @Composable
 fun ExpensesView(
-    expenses: List<Expense>,
+    uiState: ExpenseListUiState,
     onExpenseClick: (Expense) -> Unit,
     onExpenseHold: (Expense) -> Unit,
     onExpenseDelete: (Expense) -> Unit,
     onNewExpenseClick: () -> Unit,
-    canCreateNew: Boolean,
 ) {
 
     Box {
 	ExpenseList(
-	    expenses = expenses,
+	    expenses = uiState.expenses,
+	    canCreateNew = uiState.canCreateNewExpense,
+            budgetNames = uiState.budgetNames,
 	    onExpenseClick = onExpenseClick,
 	    onExpenseDelete = onExpenseDelete,
-	    canCreateNew = canCreateNew,
             onNewExpenseClick = onNewExpenseClick,
             onExpenseHold = onExpenseHold,
 	)

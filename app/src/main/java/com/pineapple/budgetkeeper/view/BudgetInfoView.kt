@@ -4,6 +4,7 @@ import com.pineapple.budgetkeeper.R
 import com.pineapple.budgetkeeper.database.entities.Budget
 import com.pineapple.budgetkeeper.database.entities.Expense
 import com.pineapple.budgetkeeper.components.ExpenseList
+import com.pineapple.budgetkeeper.uistate.BudgetInfoUiState
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -31,10 +32,9 @@ import androidx.compose.ui.res.painterResource
 
 @Composable
 fun BudgetInfoView(
-    budget: Budget,
-    expenses: List<Expense>,
+    uiState: BudgetInfoUiState,
     onBudgetEdit: (Budget) -> Unit,
-    onBudgetDelete: (Budget, Budget?) -> Unit,
+    onBudgetDelete: (Budget) -> Unit,
     onNewExpenseClick: () -> Unit,
     onExpenseClick: (Expense) -> Unit,
     onExpenseHold: (Expense) -> Unit,
@@ -44,13 +44,13 @@ fun BudgetInfoView(
     Box {
 	Column {
 	    BudgetSection(
-                budget = budget,
+                budget = uiState.budget!!,
                 onBudgetEdit = onBudgetEdit,
                 onBudgetDelete = onBudgetDelete,
             )
 	    ExpensesSection(
-                expenses = expenses,
-                budget = budget,
+                expenses = uiState.expenses,
+                budget = uiState.budget,
                 onExpenseClick = onExpenseClick,
                 onExpenseDelete = onExpenseDelete,
                 onExpenseHold = onExpenseHold,
@@ -65,7 +65,7 @@ fun BudgetInfoView(
 fun BudgetSection(
     budget: Budget,
     onBudgetEdit: (Budget) -> Unit,
-    onBudgetDelete: (Budget, Budget?) -> Unit
+    onBudgetDelete: (Budget) -> Unit,
 ) {
 
     Column(modifier = Modifier.offset(x = 80.dp, y = 20.dp)) {
@@ -85,7 +85,7 @@ fun BudgetSection(
 
 	    IconButton(
 		modifier = Modifier,
-		onClick = { onBudgetDelete(budget, null) }
+		onClick = { onBudgetDelete(budget) }
 	    ) {
 		Icon(painterResource(R.drawable.baseline_delete_24), "Delete Budget")
 	    }

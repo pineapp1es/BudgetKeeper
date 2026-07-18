@@ -20,6 +20,7 @@ import androidx.compose.runtime.Composable
 @Composable
 fun ExpenseCard(
     expense: Expense,
+    budgetName: String?,
     onClick: (Expense) -> Unit,
     onHold: (Expense) -> Unit,
     onDelete: (Expense) -> Unit,
@@ -41,6 +42,7 @@ fun ExpenseCard(
 
 	    Column {
 		Text(expense.name)
+                if (budgetName != null) Text("in" + budgetName)
 		Text(expense.cost.toString())
 		Text(dateString)
 	    }
